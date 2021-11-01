@@ -1,0 +1,23 @@
+<% if(comments){ %> 
+    <% console.log("----------------------------------------------------") %>
+    <% console.log(comments) %>
+    <% if(comments.length){%>
+        <ul>
+    <% } %> 
+
+        <% comments.forEach(async function(comment){%>
+        <li>
+            <%= comment.topic %>
+            <a href="/courses/<%= course._id%>/comments/<%= comment._id %>/reply">Reply</a>
+            <h6>test</h6>
+            <% console.log("----------------") %> 
+            <% const replyComment = await comment.populate('comments') %>            
+            <% console.log("Reply Comment: ",replyComment) %>
+            
+            <%- include('printComments',{comments:replyComment.comments,course:course}) %>
+        </li>
+        <%}) %> 
+    <% if(comments.length){%>
+        </ul>
+    <% } %>
+<% } %> 
