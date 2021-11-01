@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= lecture.name %> </title>
+</head>
+<body>
+    <h1><%=lecture.name%> </h1>
+    <a href="/courses/<%=id%>/lectures/<%=lecture._id%>/edit">Edit</a>
+    <form action="/courses/<%=id%>/lectures/<%=lecture._id%>?_method=DELETE" method="post">
+        <button>Delete</button>
+    </form>
+
+    <a href="/courses/<%=id%>/lectures/<%= lecture._id %>/comments/new">Add a question</a>
+    
+
+    <%- include('../partials/printComments',{comments:lecture.comments,lecture,id}) %> 
+</body>
+</html>

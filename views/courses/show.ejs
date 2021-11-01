@@ -13,9 +13,11 @@
         <button>Delete</button>
     </form>
 
-    <a href="/courses/<%= course._id%>/comments/new">Add a question</a>
+    <a href="/courses/<%= course._id%>/lectures/new">Add Lecture</a>
     
 
-    <%- include('../partials/printComments',{comments:course.comments,course}) %> 
+    <%for(let lecture of course.lectures){%>
+        <div> <a href="/courses/<%= course._id%>/lectures/<%= lecture._id %>"><%=lecture.name%></a></div>
+    <%}%>
 </body>
 </html>

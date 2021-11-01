@@ -1,17 +1,14 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
-const courseSchema = new Schema({
+const lectureSchema = new Schema({
     name:{
         type: String,
         required: true
     },
-    code:{
-        type:String
-    },
-    lectures: [{
+    comments: [{
         type: Schema.Types.ObjectId,
-        ref: 'Lecture'
+        ref: 'Comment'
     }],
     description: {
         type:String
@@ -19,4 +16,4 @@ const courseSchema = new Schema({
 
 })
 
-module.exports = mongoose.model('Course',courseSchema)
+module.exports = mongoose.model('Lecture',lectureSchema)
