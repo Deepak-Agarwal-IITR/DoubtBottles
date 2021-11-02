@@ -16,4 +16,14 @@ const lectureSchema = new Schema({
 
 })
 
+const autoPopulateComment = function(next){
+    this.populate('comments');
+    next();
+}
+
+lectureSchema
+    .pre('findOne',autoPopulateComment)
+    .pre('find', autoPopulateComment)
+    .pre('findById', autoPopulateComment)
+
 module.exports = mongoose.model('Lecture',lectureSchema)

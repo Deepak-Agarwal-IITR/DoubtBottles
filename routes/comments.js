@@ -17,21 +17,42 @@ router.post("/", async (req, res) => {
     res.redirect(`/courses/${id}/lectures/${lectureId}`)
 })
 
+router.route('/:commentId')
+    .post(async (req, res) => {
+        const { id, lectureId,commentId } = req.params
+        const foundComment = await Comment.findById(commentId);
+        const addedComment = new Comment(req.body.comment)
+        foundComment.comments.push(addedComment);
+        //console.log(foundComment)
+        //console.log(addedComment)
+        await addedComment.save()
+        await foundComment.save()
+        res.redirect(`/courses/${id}/lectures/${lectureId}`)
+    })
+    .put(async (req, res) => {
+        console.log(req.params)
+        console.log(req.body)
+        console.log(req.body.comment)
+        const { id, lectureId, commentId } = req.params
+        const comment = await Comment.findByIdAndUpdate(commentId, ...req.body.comment);
+        console.log(comment)
+        res.redirect(`/courses/${id}/lectures/${lectureId}`)
+    })
+    .delete(async (req, res) => {
+        const { id, lectureId, commentId } = req.params
+        await Comment.findByIdAndDelete(commentId);
+        res.redirect(`/courses/${id}/lectures/${lectureId}`)
+    })
+
+    
 router.get('/:commentId/reply', (req, res) => {
     const { id, lectureId,commentId } = req.params
     res.render("comments/reply", { id, lectureId,commentId })
 })
-
-router.post('/:commentId', async (req, res) => {
+router.get('/:commentId/edit', async(req, res) => {
     const { id, lectureId,commentId } = req.params
-    const foundComment = await Comment.findById(commentId);
-    const addedComment = new Comment(req.body.comment)
-    foundComment.comments.push(addedComment);
-    console.log(foundComment)
-    console.log(addedComment)
-    await addedComment.save()
-    await foundComment.save()
-    res.redirect(`/courses/${id}/lectures/${lectureId}`)
+    const foundComment = await Comment.findById(commentId)
+    res.render("comments/edit", { id, lectureId,comment:foundComment })
 })
 
 module.exports = router;
