@@ -6,6 +6,7 @@ const Course = require("../models/course")
 router.route('/')
     .get(async(req, res) => {
         const courses = await Course.find({});
+        //console.log(courses)
         res.render("courses/index",{courses})
     })
     .post(async(req, res) => {

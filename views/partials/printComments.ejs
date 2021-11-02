@@ -4,12 +4,15 @@
         <ul>
     <% } %> 
 
-        <% comments.forEach(async function(comment){%>
+        <% comments.forEach(function(comment){%>
         <li>
             <%= comment.topic %>
-            <a href="/courses/<%=id %>/lectures/<%= lecture._id%> /comments/<%= comment._id %>/reply">Reply</a>        
-            <% const replyComment = await comment.populate('comments') %>                        
-            <%- include('printComments',{comments:replyComment.comments,lecture,id}) %>
+            <a href="/courses/<%=id %>/lectures/<%= lecture._id%>/comments/<%= comment._id %>/reply">Reply<a>                     
+            <a href="/courses/<%=id %>/lectures/<%= lecture._id%>/comments/<%= comment._id %>/edit">Edit</a> 
+            <form action="/courses/<%=id %>/lectures/<%= lecture._id%>/comments/<%= comment._id %>?_method=DELETE" method="post">
+                <button>Delete</button>
+            </form> 
+            <%- include('printComments',{comments:comment.comments,lecture,id}) %>
         </li>
         <%}) %> 
     <% if(comments.length){%>

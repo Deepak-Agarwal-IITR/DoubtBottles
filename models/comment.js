@@ -15,4 +15,14 @@ const commentSchema = new Schema({
     }]
 })
 
+const autoPopulateComment = function(next){
+    this.populate('comments');
+    next();
+}
+
+commentSchema
+    .pre('findOne',autoPopulateComment)
+    .pre('find', autoPopulateComment)
+    .pre('findById', autoPopulateComment)
+    
 module.exports = mongoose.model('Comment',commentSchema)

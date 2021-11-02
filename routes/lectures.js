@@ -22,7 +22,9 @@ router.route("/")
 router.route("/:lectureId")
     .get(async (req, res) => {
         const {id,lectureId} = req.params
-        const lecture = await Lecture.findById(lectureId).populate('comments')
+        const lecture = await Lecture.findById(lectureId)//.populate('comments')
+        //console.log(lecture)
+        //console.log(lecture.comments)
         res.render('lectures/show',{lecture,id})
     })
     .put(async(req, res) => {
