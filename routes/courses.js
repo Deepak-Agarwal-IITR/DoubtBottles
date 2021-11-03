@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router();
 const Course = require("../models/course")
 
+const { isLoggedIn } = require('../middleware')
 
 router.route('/')
     .get(async(req, res) => {
@@ -9,14 +10,14 @@ router.route('/')
         //console.log(courses)
         res.render("courses/index",{courses})
     })
-    .post(async(req, res) => {
+    .post(isLoggedIn, async(req, res) => {
         const course = new Course(req.body.course)
         await course.save();
         req.flash('success',"Created a new course")
         res.redirect("/courses")
     })
 
-router.get('/new', (req, res) => {
+router.get('/new',isLoggedIn, (req, res) => {
     res.render("courses/new")
 })
 
@@ -26,20 +27,20 @@ router.route('/:id')
         const course = await Course.findById(id).populate('lectures')
         res.render('courses/show',{course})
     })
-    .put(async(req, res) => {
+    .put(isLoggedIn, async(req, res) => {
         const { id } = req.params
         const course = await Course.findByIdAndUpdate(id,{...req.body.course})
          req.flash('success',"Updated course")
         res.redirect(`/courses/${id}`)
     })
-    .delete(async (req, res) => {
+    .delete(isLoggedIn, async (req, res) => {
         const { id } = req.params
         await Course.findByIdAndDelete(id)
-         req.flash('success',"Deleted course")
+        req.flash('success',"Deleted course")
         res.redirect('/courses')
     })
     
-router.get('/:id/edit', async (req, res) => {
+router.get('/:id/edit', isLoggedIn, async (req, res) => {
     const { id } = req.params
     const course = await Course.findById(id)
     res.render('courses/edit', { course })
