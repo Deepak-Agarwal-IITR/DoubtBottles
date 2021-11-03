@@ -14,6 +14,7 @@ router.post("/", async (req, res) => {
     lecture.comments.push(comment)
     await comment.save();
     await lecture.save();
+    req.flash('success', "Added question")
     res.redirect(`/courses/${id}/lectures/${lectureId}`)
 })
 
@@ -27,6 +28,7 @@ router.route('/:commentId')
         //console.log(addedComment)
         await addedComment.save()
         await foundComment.save()
+        req.flash('success', "Added reply")
         res.redirect(`/courses/${id}/lectures/${lectureId}`)
     })
     .put(async (req, res) => {
@@ -34,13 +36,17 @@ router.route('/:commentId')
         console.log(req.body)
         console.log(req.body.comment)
         const { id, lectureId, commentId } = req.params
-        const comment = await Comment.findByIdAndUpdate(commentId, ...req.body.comment);
+        const comment = await Comment.findById(commentId);//AndUpdate(commentId, ...req.body.comment);
+        comment.topic = req.body.comment.topic;
+        await comment.save();
         console.log(comment)
+        req.flash('success', "Updated comment")
         res.redirect(`/courses/${id}/lectures/${lectureId}`)
     })
     .delete(async (req, res) => {
         const { id, lectureId, commentId } = req.params
         await Comment.findByIdAndDelete(commentId);
+        req.flash('success', "Deleted Comment")
         res.redirect(`/courses/${id}/lectures/${lectureId}`)
     })
 

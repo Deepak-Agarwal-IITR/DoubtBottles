@@ -7,6 +7,8 @@
     <title><%= course.name %> </title>
 </head>
 <body>
+    <%-include('../partials/navbar')%>
+    <%-include('../partials/flash')%>
     <h1><%=course.name%> </h1>
     <a href="/courses/<%= course._id%>/edit">Edit</a>
     <form action="/courses/<%= course._id%>?_method=DELETE" method="post">
