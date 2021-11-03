@@ -16,6 +16,7 @@ router.route("/")
         course.lectures.push(lecture)
         await lecture.save();
         await course.save();
+        req.flash('success',"Created a new lecture")
         res.redirect(`/courses/${id}`)
     })
 
@@ -30,11 +31,13 @@ router.route("/:lectureId")
     .put(async(req, res) => {
         const { id,lectureId } = req.params
         const lecture = await Lecture.findByIdAndUpdate(lectureId,{...req.body.lecture})
+        req.flash('success', "Updated Lecture")
         res.redirect(`/courses/${id}/lectures/${lectureId}`)
     })
     .delete(async (req, res) => {
         const { id ,lectureId} = req.params
         await Lecture.findByIdAndDelete(lectureId)
+        req.flash('success', "Deleted Lecture")
         res.redirect(`/courses/${id}`)
     })
 

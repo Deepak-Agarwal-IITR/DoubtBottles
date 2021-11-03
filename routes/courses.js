@@ -12,6 +12,7 @@ router.route('/')
     .post(async(req, res) => {
         const course = new Course(req.body.course)
         await course.save();
+        req.flash('success',"Created a new course")
         res.redirect("/courses")
     })
 
@@ -28,11 +29,13 @@ router.route('/:id')
     .put(async(req, res) => {
         const { id } = req.params
         const course = await Course.findByIdAndUpdate(id,{...req.body.course})
+         req.flash('success',"Updated course")
         res.redirect(`/courses/${id}`)
     })
     .delete(async (req, res) => {
         const { id } = req.params
         await Course.findByIdAndDelete(id)
+         req.flash('success',"Deleted course")
         res.redirect('/courses')
     })
     
