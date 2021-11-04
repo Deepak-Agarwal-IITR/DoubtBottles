@@ -12,9 +12,12 @@ router.route('/register',)
             const { username, password } = req.body.user;
             const user = new User({ username });
             const registeredUser = await User.register(user, password);
-            console.log(registeredUser);
-            req.flash('success', 'Welcome!')
-            res.redirect('/courses');
+            //console.log(registeredUser);
+            req.login(registeredUser,err=>{
+                if(err) return next(err);
+                req.flash('success', 'Welcome!')
+                res.redirect('/courses');
+            })
         } catch (e) {
             req.flash('error',e.message)
             res.redirect('/register')
