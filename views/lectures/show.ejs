@@ -10,14 +10,16 @@
     <%-include('../partials/navbar')%>
     <%-include('../partials/flash')%>
     <h1><%=lecture.name%> </h1>
-    <a href="/courses/<%=id%>/lectures/<%=lecture._id%>/edit">Edit</a>
-    <form action="/courses/<%=id%>/lectures/<%=lecture._id%>?_method=DELETE" method="post">
+    <% if(currentUser && currentUser._id.equals(course.teacher)){ %>
+    <a href="/courses/<%=course._id%>/lectures/<%=lecture._id%>/edit">Edit</a>
+    <form action="/courses/<%=course._id%>/lectures/<%=lecture._id%>?_method=DELETE" method="post">
         <button>Delete</button>
     </form>
+    <%}%>
+    <%if(currentUser){%>
+    <a href="/courses/<%=course._id%>/lectures/<%= lecture._id %>/comments/new">Add a question</a>
+    <%}%>
 
-    <a href="/courses/<%=id%>/lectures/<%= lecture._id %>/comments/new">Add a question</a>
-    
-
-    <%- include('../partials/printComments',{comments:lecture.comments,lecture,id}) %> 
+    <%- include('../partials/printComments',{comments:lecture.comments,lecture,id: course._id}) %> 
 </body>
 </html>

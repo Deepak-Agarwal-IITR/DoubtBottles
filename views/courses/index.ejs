@@ -10,7 +10,9 @@
     <%-include('../partials/navbar')%>
     <%-include('../partials/flash')%>
     <h1>All Courses</h1>
+    <%if(currentUser){%>
     <a href="/courses/new">Add New Course</a>
+    <%}%>
     <%for(let course of courses){%>
         <div>
             <a href="/courses/<%=course._id%>"><p><%=course.name%>- By <%= course.teacher.username %></p></a>

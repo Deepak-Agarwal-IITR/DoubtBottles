@@ -10,13 +10,15 @@
     <%-include('../partials/navbar')%>
     <%-include('../partials/flash')%>
     <h1><%=course.name%> </h1>
+
+    <% if(currentUser && currentUser._id.equals(course.teacher._id)){ %> 
     <a href="/courses/<%= course._id%>/edit">Edit</a>
     <form action="/courses/<%= course._id%>?_method=DELETE" method="post">
         <button>Delete</button>
     </form>
 
     <a href="/courses/<%= course._id%>/lectures/new">Add Lecture</a>
-    
+    <%}%>
 
     <%for(let lecture of course.lectures){%>
         <div> <a href="/courses/<%= course._id%>/lectures/<%= lecture._id %>"><%=lecture.name%></a></div>
