@@ -13,7 +13,7 @@
     <a href="/courses/new">Add New Course</a>
     <%for(let course of courses){%>
         <div>
-            <a href="/courses/<%=course._id%>"><p><%=course.name%></p></a>
+            <a href="/courses/<%=course._id%>"><p><%=course.name%>- By <%= course.teacher.username %></p></a>
             <p>
                 <%=course.code%>
             </p>

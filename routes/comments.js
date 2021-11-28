@@ -3,14 +3,17 @@ const router = express.Router({mergeParams:true});
 const Lecture = require('../models/lecture')
 const Comment = require('../models/comment')
 
-router.get("/new", (req, res) => {
+const { isLoggedIn,isCommentUser } = require('../middleware')
+
+router.get("/new", isLoggedIn, (req, res) => {
     const {id,lectureId} = req.params
     res.render("comments/new",{id,lectureId})
 })
-router.post("/", async (req, res) => {
+router.post("/", isLoggedIn, async (req, res) => {
     const { id,lectureId } = req.params
     const lecture = await Lecture.findById(lectureId);
     const comment = new Comment(req.body.comment)
+    comment.user = req.user;
     lecture.comments.push(comment)
     await comment.save();
     await lecture.save();
@@ -18,11 +21,12 @@ router.post("/", async (req, res) => {
     res.redirect(`/courses/${id}/lectures/${lectureId}`)
 })
 
-router.route('/:commentId')
+router.route('/:commentId', isLoggedIn)
     .post(async (req, res) => {
         const { id, lectureId,commentId } = req.params
         const foundComment = await Comment.findById(commentId);
         const addedComment = new Comment(req.body.comment)
+        addedComment.user = req.user;
         foundComment.comments.push(addedComment);
         //console.log(foundComment)
         //console.log(addedComment)
@@ -31,19 +35,20 @@ router.route('/:commentId')
         req.flash('success', "Added reply")
         res.redirect(`/courses/${id}/lectures/${lectureId}`)
     })
-    .put(async (req, res) => {
+    .put(isCommentUser,async (req, res) => {
         console.log(req.params)
         console.log(req.body)
         console.log(req.body.comment)
         const { id, lectureId, commentId } = req.params
-        const comment = await Comment.findById(commentId);//AndUpdate(commentId, ...req.body.comment);
-        comment.topic = req.body.comment.topic;
+        const comment = await Comment.findByIdAndUpdate(commentId, { ...req.body.comment });
+        //(commentId);
+        //comment.topic = req.body.comment.topic;
         await comment.save();
-        console.log(comment)
+        //console.log(comment)
         req.flash('success', "Updated comment")
         res.redirect(`/courses/${id}/lectures/${lectureId}`)
     })
-    .delete(async (req, res) => {
+    .delete(isCommentUser,async (req, res) => {
         const { id, lectureId, commentId } = req.params
         await Comment.findByIdAndDelete(commentId);
         req.flash('success', "Deleted Comment")
@@ -51,11 +56,11 @@ router.route('/:commentId')
     })
 
     
-router.get('/:commentId/reply', (req, res) => {
+router.get('/:commentId/reply', isLoggedIn,(req, res) => {
     const { id, lectureId,commentId } = req.params
     res.render("comments/reply", { id, lectureId,commentId })
 })
-router.get('/:commentId/edit', async(req, res) => {
+router.get('/:commentId/edit', isLoggedIn,isCommentUser, async(req, res) => {
     const { id, lectureId,commentId } = req.params
     const foundComment = await Comment.findById(commentId)
     res.render("comments/edit", { id, lectureId,comment:foundComment })

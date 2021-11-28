@@ -12,11 +12,15 @@ const commentSchema = new Schema({
     comments: [{
         type: Schema.Types.ObjectId,
         ref: 'Comment'
-    }]
+    }],
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }
 })
 
 const autoPopulateComment = function(next){
-    this.populate('comments');
+    this.populate('comments').populate('user');
     next();
 }
 
