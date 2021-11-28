@@ -15,6 +15,10 @@ const courseSchema = new Schema({
     }],
     description: {
         type:String
+    },
+    teacher: {
+        type:Schema.Types.ObjectId,
+        ref: 'User'
     }
 
 })

@@ -3,12 +3,14 @@ const router = express.Router({mergeParams:true});
 const Course = require("../models/course")
 const Lecture = require("../models/lecture")
 
-router.get("/new", (req, res) => {
+const { isLoggedIn, isTeacher } = require('../middleware')
+
+router.get("/new", isLoggedIn, isTeacher, (req, res) => {
     const {id} = req.params
     res.render("lectures/new",{id})
 })
 
-router.route("/")
+router.route("/",isLoggedIn,isTeacher)
     .post(async (req, res) => {
         const { id } = req.params
         const course = await Course.findById(id);
@@ -28,20 +30,20 @@ router.route("/:lectureId")
         //console.log(lecture.comments)
         res.render('lectures/show',{lecture,id})
     })
-    .put(async(req, res) => {
+    .put(isLoggedIn,isTeacher,async(req, res) => {
         const { id,lectureId } = req.params
         const lecture = await Lecture.findByIdAndUpdate(lectureId,{...req.body.lecture})
         req.flash('success', "Updated Lecture")
         res.redirect(`/courses/${id}/lectures/${lectureId}`)
     })
-    .delete(async (req, res) => {
+    .delete(isLoggedIn,isTeacher,async (req, res) => {
         const { id ,lectureId} = req.params
         await Lecture.findByIdAndDelete(lectureId)
         req.flash('success', "Deleted Lecture")
         res.redirect(`/courses/${id}`)
     })
 
-router.get('/:lectureId/edit', async (req, res) => {
+router.get('/:lectureId/edit', isLoggedIn,isTeacher, async (req, res) => {
     const {id,lectureId } = req.params
     const lecture = await Lecture.findById(lectureId)
     res.render('lectures/edit', { lecture,id})
