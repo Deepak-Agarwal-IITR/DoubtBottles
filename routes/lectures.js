@@ -25,10 +25,11 @@ router.route("/",isLoggedIn,isTeacher)
 router.route("/:lectureId")
     .get(async (req, res) => {
         const {id,lectureId} = req.params
+        const course = await Course.findById(id);
         const lecture = await Lecture.findById(lectureId)//.populate('comments')
         //console.log(lecture)
         //console.log(lecture.comments)
-        res.render('lectures/show',{lecture,id})
+        res.render('lectures/show',{lecture,course})
     })
     .put(isLoggedIn,isTeacher,async(req, res) => {
         const { id,lectureId } = req.params

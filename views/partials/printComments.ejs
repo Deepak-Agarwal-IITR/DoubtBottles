@@ -7,10 +7,15 @@
         <% comments.forEach(function(comment){%>
         <li>
             <%= comment.topic %> -By <%=comment.user.username%>
-            <a href="/courses/<%=id %>/lectures/<%= lecture._id%>/comments/<%= comment._id %>/reply">Reply<a>                     
-            <a href="/courses/<%=id %>/lectures/<%= lecture._id%>/comments/<%= comment._id %>/edit">Edit</a> 
-            <form action="/courses/<%=id %>/lectures/<%= lecture._id%>/comments/<%= comment._id %>?_method=DELETE" method="post">
-                <button>Delete</button>
+            <%if(currentUser){%>
+            <a href="/courses/<%=id %>/lectures/<%= lecture._id%>/comments/<%= comment._id %>/reply">Reply<a>   
+            <%}%>     
+            <%if(currentUser && currentUser._id.equals(comment.user._id)){%>             
+                <a href="/courses/<%=id %>/lectures/<%= lecture._id%>/comments/<%= comment._id %>/edit">Edit</a> 
+
+                <form action="/courses/<%=id %>/lectures/<%= lecture._id%>/comments/<%= comment._id %>?_method=DELETE" method="post">
+                    <button>Delete</button>
+            <% } %> 
             </form> 
             <%- include('printComments',{comments:comment.comments,lecture,id}) %>
         </li>
