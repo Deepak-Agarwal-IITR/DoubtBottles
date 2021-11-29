@@ -19,8 +19,12 @@ const courseSchema = new Schema({
     teacher: {
         type:Schema.Types.ObjectId,
         ref: 'User'
-    }
+    },
+    users:[{
+        type:Schema.Types.ObjectId,
+        ref:'User'
+    }]
 
 })
 
-module.exports = mongoose.model('Course',courseSchema)
+module.exports = mongoose.model('Course',courseSchema)  

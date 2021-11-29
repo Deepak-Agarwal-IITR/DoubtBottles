@@ -12,12 +12,16 @@
     <h1><%=course.name%> </h1>
 
     <% if(currentUser && currentUser._id.equals(course.teacher._id)){ %> 
-    <a href="/courses/<%= course._id%>/edit">Edit</a>
-    <form action="/courses/<%= course._id%>?_method=DELETE" method="post">
-        <button>Delete</button>
-    </form>
+        <a href="/courses/<%= course._id%>/edit">Edit</a>
+        <form action="/courses/<%= course._id%>?_method=DELETE" method="post">
+            <button>Delete</button>
+        </form>
 
-    <a href="/courses/<%= course._id%>/lectures/new">Add Lecture</a>
+        <a href="/courses/<%= course._id%>/lectures/new">Add Lecture</a>
+    <%}else if(currentUser && !(course.teacher.equals(currentUser._id) || course.users.includes(currentUser._id))){%>
+        <form action="/courses/<%=course._id%>/enroll" method="POST">
+            <button>Enroll in Course</button> 
+        </form>
     <%}%>
 
     <%for(let lecture of course.lectures){%>

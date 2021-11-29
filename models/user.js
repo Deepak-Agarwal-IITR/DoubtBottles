@@ -6,7 +6,11 @@ const passportLocalMongoose = require('passport-local-mongoose');
 const userSchema = new Schema({
     name: {
         type: String
-    }
+    },
+    notifications:[{
+        type: Schema.Types.ObjectId,
+        ref: 'Notification'
+    }]
 })
 
 userSchema.plugin(passportLocalMongoose);

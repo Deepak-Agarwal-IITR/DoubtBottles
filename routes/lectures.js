@@ -3,7 +3,7 @@ const router = express.Router({mergeParams:true});
 const Course = require("../models/course")
 const Lecture = require("../models/lecture")
 
-const { isLoggedIn, isTeacher } = require('../middleware')
+const { isLoggedIn, isTeacher,isEnrolledInCourse } = require('../middleware')
 
 router.get("/new", isLoggedIn, isTeacher, (req, res) => {
     const {id} = req.params
@@ -23,12 +23,10 @@ router.route("/",isLoggedIn,isTeacher)
     })
 
 router.route("/:lectureId")
-    .get(async (req, res) => {
+    .get(isEnrolledInCourse, async (req, res) => {
         const {id,lectureId} = req.params
         const course = await Course.findById(id);
-        const lecture = await Lecture.findById(lectureId)//.populate('comments')
-        //console.log(lecture)
-        //console.log(lecture.comments)
+        const lecture = await Lecture.findById(lectureId)
         res.render('lectures/show',{lecture,course})
     })
     .put(isLoggedIn,isTeacher,async(req, res) => {
