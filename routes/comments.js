@@ -3,13 +3,13 @@ const router = express.Router({mergeParams:true});
 const Lecture = require('../models/lecture')
 const Comment = require('../models/comment')
 
-const { isLoggedIn,isCommentUser } = require('../middleware')
+const { isLoggedIn,isCommentUser,isEnrolledInCourse } = require('../middleware')
 
-router.get("/new", isLoggedIn, (req, res) => {
+router.get("/new", isLoggedIn,isEnrolledInCourse, (req, res) => {
     const {id,lectureId} = req.params
     res.render("comments/new",{id,lectureId})
 })
-router.post("/", isLoggedIn, async (req, res) => {
+router.post("/", isLoggedIn,isEnrolledInCourse, async (req, res) => {
     const { id,lectureId } = req.params
     const lecture = await Lecture.findById(lectureId);
     const comment = new Comment(req.body.comment)
@@ -21,15 +21,13 @@ router.post("/", isLoggedIn, async (req, res) => {
     res.redirect(`/courses/${id}/lectures/${lectureId}`)
 })
 
-router.route('/:commentId', isLoggedIn)
+router.route('/:commentId', isLoggedIn,isEnrolledInCourse)
     .post(async (req, res) => {
         const { id, lectureId,commentId } = req.params
         const foundComment = await Comment.findById(commentId);
         const addedComment = new Comment(req.body.comment)
         addedComment.user = req.user;
         foundComment.comments.push(addedComment);
-        //console.log(foundComment)
-        //console.log(addedComment)
         await addedComment.save()
         await foundComment.save()
         req.flash('success', "Added reply")
@@ -41,10 +39,7 @@ router.route('/:commentId', isLoggedIn)
         console.log(req.body.comment)
         const { id, lectureId, commentId } = req.params
         const comment = await Comment.findByIdAndUpdate(commentId, { ...req.body.comment });
-        //(commentId);
-        //comment.topic = req.body.comment.topic;
         await comment.save();
-        //console.log(comment)
         req.flash('success', "Updated comment")
         res.redirect(`/courses/${id}/lectures/${lectureId}`)
     })
@@ -56,11 +51,11 @@ router.route('/:commentId', isLoggedIn)
     })
 
     
-router.get('/:commentId/reply', isLoggedIn,(req, res) => {
+router.get('/:commentId/reply', isLoggedIn,isEnrolledInCourse, (req, res) => {
     const { id, lectureId,commentId } = req.params
     res.render("comments/reply", { id, lectureId,commentId })
 })
-router.get('/:commentId/edit', isLoggedIn,isCommentUser, async(req, res) => {
+router.get('/:commentId/edit', isLoggedIn,isEnrolledInCourse,isCommentUser, async(req, res) => {
     const { id, lectureId,commentId } = req.params
     const foundComment = await Comment.findById(commentId)
     res.render("comments/edit", { id, lectureId,comment:foundComment })

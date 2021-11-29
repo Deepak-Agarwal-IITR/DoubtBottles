@@ -27,3 +27,13 @@ module.exports.isCommentUser = async(req,res,next) => {
     }
     next();
 }
+
+module.exports.isEnrolledInCourse = async (req, res, next) => {
+    const { id } = req.params;
+    const course = await Course.findById(id);
+    if(!(course.users.includes(req.user._id) || course.teacher.equals(req.user._id))){
+        req.flash('error', "You are not a member of the course.")
+        return res.redirect(`/courses/${id}`);
+    }
+    next();
+}

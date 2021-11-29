@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Courses</title>
+    <title><%=title%></title>
 </head>
 <body>
     <%-include('../partials/navbar')%>
     <%-include('../partials/flash')%>
-    <h1>All Courses</h1>
-    <%if(currentUser){%>
+    <h1><%=title%></h1>
+    <%if(currentUser && title=="All Courses"){%>
     <a href="/courses/new">Add New Course</a>
     <%}%>
     <%for(let course of courses){%>
@@ -19,7 +19,11 @@
             <p>
                 <%=course.code%>
             </p>
-            
+            <% if(currentUser && !(course.teacher.equals(currentUser._id) || course.users.includes(currentUser._id))){%>
+                <form action="/courses/<%=course._id%>/enroll" method="POST">
+                    <button>Enroll in Course</button> 
+                </form>
+            <%}%>
         </div>
     <%}%>
 </body>
