@@ -6,17 +6,30 @@
 
         <% comments.forEach(function(comment){%>
         <li>
-            <%= comment.topic %> -By <%=comment.user.username%>
+            <%= comment.topic %> -By <%=comment.user.username%> on <%=comment.createdOn.toLocaleString()%>
             <%if(currentUser){%>
-            <a href="/courses/<%=id %>/lectures/<%= lecture._id%>/comments/<%= comment._id %>/reply">Reply<a>   
+            <a href="/courses/<%=id %>/lectures/<%= lecture._id%>/comments/<%= comment._id %>/reply">Reply<a>  
+            <br>
+            <span><%- (comment.likedBy.includes(currentUser._id) ? "&#9829;" :"&#9653;") %></span>
+            <span><%=comment.likedBy.length%></span>
+            <a href="/courses/<%=id %>/lectures/<%= lecture._id%>/comments/<%= comment._id %>?like=true">
+            <%=comment.likedBy.length>1?"Likes":"Like"%>
+            </a>
+            <br> 
+            <span><%-(comment.dislikedBy.includes(currentUser._id)? "&#10007;" : "&#9663;" )%>
+            <span><%=comment.dislikedBy.length%></span>
+            <a href="/courses/<%=id %>/lectures/<%= lecture._id%>/comments/<%= comment._id %>?like=false"><%=comment.dislikedBy.length>1?"Dislikes":"Dislike"%></a>
             <%}%>     
+
             <%if(currentUser && currentUser._id.equals(comment.user._id)){%>             
+                <br>
                 <a href="/courses/<%=id %>/lectures/<%= lecture._id%>/comments/<%= comment._id %>/edit">Edit</a> 
 
                 <form action="/courses/<%=id %>/lectures/<%= lecture._id%>/comments/<%= comment._id %>?_method=DELETE" method="post">
                     <button>Delete</button>
+                </form>
             <% } %> 
-            </form> 
+            
             <%- include('printComments',{comments:comment.comments,lecture,id}) %>
         </li>
         <%}) %> 

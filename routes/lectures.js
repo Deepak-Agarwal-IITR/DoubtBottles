@@ -23,7 +23,7 @@ router.route("/",isLoggedIn,isTeacher)
     })
 
 router.route("/:lectureId")
-    .get(isEnrolledInCourse, async (req, res) => {
+    .get(isLoggedIn, isEnrolledInCourse, async (req, res) => {
         const {id,lectureId} = req.params
         const course = await Course.findById(id);
         const lecture = await Lecture.findById(lectureId)

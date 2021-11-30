@@ -16,6 +16,17 @@ const commentSchema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
         ref: 'User'
+    },
+    likedBy:[{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+    dislikedBy:[{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+    createdOn:{
+        type: Date
     }
 })
 

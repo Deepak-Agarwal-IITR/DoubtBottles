@@ -58,6 +58,7 @@ router.post('/:id/enroll', isLoggedIn, isAlreadyEnrolled, async (req, res) => {
     const course = await Course.findById(id);
     const teacher = await User.findById(course.teacher);
     const notification = new Notification({ description: `${req.user.username} wants to enroll in Your Course: ${course.name}`, sender: req.user._id, receiver: teacher._id, course,category:"enroll"});
+    notification.createdOn = new Date();
     teacher.notifications.push(notification);
     await teacher.save();
     await notification.save();
