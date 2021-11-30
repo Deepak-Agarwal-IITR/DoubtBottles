@@ -13,7 +13,7 @@
     <%-include('../partials/flash')%>
     <h1>Notifications</h1>
     <%for(let notification of notifications){%>
-        <div><%=notification.description%></div>
+        <div><%=notification.description%> on <%=notification.createdOn.toLocaleString()%></div>
         <%if(notification.category=="enroll" && !notification.isResolved){%>
             <a href="/notifications/<%=notification._id%>?toAccept=true">Accept</a>
             <a href="/notifications/<%=notification._id%>?toAccept=false">Decline</a>

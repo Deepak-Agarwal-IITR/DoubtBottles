@@ -62,7 +62,7 @@ router.get('/notifications/:id',isLoggedIn,async(req,res)=>{
         await notification.save();
 
         const sendNotification = new Notification({ description: `You have been enrolled in ${course.name} by ${receiver.username}.`, sender: receiver._id, receiver: sender._id, category: 'message' });
-
+        sendNotification.createdOn = new Date();
         sender.notifications.push(sendNotification);
         await sendNotification.save();
         await sender.save();
@@ -74,7 +74,7 @@ router.get('/notifications/:id',isLoggedIn,async(req,res)=>{
         await notification.save();
 
         const sendNotification = new Notification({ description: `Your request for enrolling in ${course.name} by ${receiver.username} has been canceled.`, sender: receiver._id, receiver: sender._id, category: 'message' });
-
+        sendNotification.createdOn = new Date();
         sender.notifications.push(sendNotification);
         await sendNotification.save();
         await sender.save();
