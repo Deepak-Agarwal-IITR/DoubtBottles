@@ -37,3 +37,13 @@ module.exports.isEnrolledInCourse = async (req, res, next) => {
     }
     next();
 }
+
+module.exports.isAlreadyEnrolled = async (req, res, next) => {
+    const { id } = req.params;
+    const course = await Course.findById(id);
+    if (!(course.users.includes(req.user._id) || course.teacher.equals(req.user._id))) {
+        req.flash('error', "You are already in the course.")
+        return res.redirect(`/courses/${id}`);
+    }
+    next();
+}

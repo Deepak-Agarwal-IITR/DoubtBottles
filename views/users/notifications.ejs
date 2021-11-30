@@ -14,8 +14,13 @@
     <h1>Notifications</h1>
     <%for(let notification of notifications){%>
         <div><%=notification.description%></div>
-        <a href="/notifications/<%=notification._id%>?toAccept=true">Accept</a>
-        <a href="/notifications/<%=notification._id%>?toAccept=false">Decline</a>
+        <%if(notification.category=="enroll" && !notification.isResolved){%>
+            <a href="/notifications/<%=notification._id%>?toAccept=true">Accept</a>
+            <a href="/notifications/<%=notification._id%>?toAccept=false">Decline</a>
+        <%}else if(notification.category=="message"){%>
+            <p>Dismiss</p>
+        <%}%>
+
     <%}%>
 </body>
 </html>

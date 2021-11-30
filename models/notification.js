@@ -17,6 +17,14 @@ const notificationSchema = new Schema({
     course: {
         type: Schema.Types.ObjectId,
         ref:'Course'
+    },
+    isResolved:{
+        type: Boolean,
+        default: false
+    },
+    category: {
+        type: String,
+        enum:["message","enroll"]
     }
 
 })
