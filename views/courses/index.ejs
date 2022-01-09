@@ -1,30 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%=title%></title>
-</head>
-<body>
-    <%-include('../partials/navbar')%>
-    <%-include('../partials/flash')%>
+<%-include('../partials/header',{title: title})%>
     <h1><%=title%></h1>
+    
     <%if(currentUser && title=="All Courses"){%>
-    <a href="/courses/new">Add New Course</a>
-    <%}%>
-    <%for(let course of courses){%>
-        <div>
-            <a href="/courses/<%=course._id%>"><p><%=course.name%>- By <%= course.teacher.username %></p></a>
-            <p>
-                <%=course.code%>
-            </p>
-            <% if(currentUser && !(course.teacher.equals(currentUser._id) || course.users.includes(currentUser._id))){%>
-                <form action="/courses/<%=course._id%>/enroll" method="POST">
-                    <button>Enroll in Course</button> 
-                </form>
-            <%}%>
+        <div class="mb-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-plus" viewBox="0 0 16 16">
+                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+            </svg><a class="btn btn-light" href="/courses/new">Add New Course</a>
         </div>
     <%}%>
-</body>
-</html>
+
+    <%for(let course of courses){%>
+
+        <div class="card mb-3">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <img src="" class="img-fluid rounded-start" alt="">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title"><%=course.name%></h5>
+                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                        <div class="row">
+                            <p class="card-text col-md-6"><small class="text-muted">Teacher: <%= course.teacher.username %></small></p>
+                            <p class="card-text col-md-6"><small class="text-muted"><%= course.users.length%> students</small></p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="row justify-content-md-end">
+                            <div class="col-md-auto text-end">
+                                <a class="btn btn-info" href="/courses/<%=course._id%>">View</a>
+                            </div>
+                            <% if(currentUser && !(course.teacher.equals(currentUser._id) || course.users.includes(currentUser._id))){%>
+                                <div class="col-md-auto text-end">
+                                    <form action="/courses/<%=course._id%>/enroll" method="POST">
+                                        <button class="btn btn-primary">Enroll in Course</button> 
+                                    </form>
+                                </div>
+                            <%}%>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+    <%}%>
+    
+<%-include('../partials/footer')%>

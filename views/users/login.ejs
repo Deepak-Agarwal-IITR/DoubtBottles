@@ -1,24 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-</head>
-
-<body>
-    <%-include('../partials/navbar')%>
-        <%-include('../partials/flash')%>
-            <h1>Login</h1>
-            <form action="/login" method="post">
-                <label for="username">Username:</label>
-                <input type="text" name="username" id="username">
-                <label for="password">Password:</label>
-                <input type="password" name="password" id="password">
-                <button>Log In</button>
-            </form>
-</body>
-
-</html>
+<%-include('../partials/header',{title: "Login"})%>
+<h1>Login</h1>
+<form class="needs-validation" novalidate action="/login" method="post">
+    <div class="mb-3">
+        <label for="username">Username:</label>
+        <input type="text" name="username" id="username" required>
+        <div class="valid-feedback">
+            Looks good!
+        </div>
+        <div class="invalid-feedback">
+            Please choose a username.
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password" required>
+        <div class="valid-feedback">
+            Looks good!
+        </div>
+        <div class="invalid-feedback">
+            Please choose a password.
+        </div>
+    </div>
+    <div class="mb-3">
+        <button class="btn btn-primary" type="submit">Log In</button>
+    </div>
+</form>
+<%-include('../partials/footer')%>

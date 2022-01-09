@@ -1,20 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Lecture</title>
-</head>
-
-<body>
+<%-include('../partials/header',{title: "Edit Lecture"})%>
     <h1>Edit Lecture</h1>
-    <form action="/courses/<%=id%>/lectures/<%= lecture._id %>?_method=PUT" method="post">
-        <label for="name">Name: </label>
-        <input type="text" name="lecture[name]" id="name" value="<%=lecture.name%>">
-        <button>Save</button>
+    <form class="needs-validation" novalidate action="/courses/<%=id%>/lectures/<%= lecture._id %>?_method=PUT" method="post">
+        <div class="mb-3">
+            <label for="name">Name: </label>
+            <input type="text" name="lecture[name]" id="name" value="<%=lecture.name%>">
+        </div>
+        <div class="mb-3">
+            <button class="btn btn-success" type="submit">Save</button>
+        </div>
     </form>
-</body>
-
-</html>
+<%-include('../partials/footer')%>

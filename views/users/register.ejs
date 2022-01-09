@@ -1,21 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
-</head>
-<body>
-    <%-include('../partials/navbar')%> 
-    <%-include('../partials/flash')%>
+<%-include('../partials/header',{title: "Register"})%>
     <h1>Register</h1>
-    <form action="/register" method="post">
-        <label for="username">Username:</label>
-        <input type="text" name="user[username]" id="username">
-        <label for="password">Password:</label>
-        <input type="password" name="user[password]" id="password">
-        <button>Submit</button>
+    <form class="needs-validation" novalidate action="/register" method="post">
+        <div class="mb-3">
+            <label for="username">Username:</label>
+            <input type="text" name="user[username]" id="username" required>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Please choose a username.
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="password">Password:</label>
+            <input type="password" name="user[password]" id="password" required>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Please choose a password.
+            </div>
+        </div> 
+        <div class="mb-3">
+            <button class="btn btn-primary" type="submit">Submit</button>
+        </div>
     </form>
-</body>
-</html>
+<%-include('../partials/footer')%>

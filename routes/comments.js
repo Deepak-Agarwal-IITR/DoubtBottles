@@ -32,7 +32,6 @@ router.route('/:commentId', isLoggedIn,isEnrolledInCourse)
 
         const isLiked = comment.likedBy.includes(req.user._id);
         const isDisliked = comment.dislikedBy.includes(req.user._id);
-
         if(like=="true"){
             if(!isLiked && !isDisliked){
                 comment.likedBy.push(req.user);
@@ -44,7 +43,7 @@ router.route('/:commentId', isLoggedIn,isEnrolledInCourse)
             }
         } else if (like == "false") {
             if (!isLiked && !isDisliked) {
-                comment.dislikedBy.push(req.user);
+                comment.dislikedBy.push(req.user);        
             } else if (isLiked && !isDisliked) {
                 comment.likedBy.pull(req.user);
                 comment.dislikedBy.push(req.user);
