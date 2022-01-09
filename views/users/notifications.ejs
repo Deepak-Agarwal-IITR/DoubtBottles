@@ -1,27 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notifications</title>
-</head>
-
-<body>
-    <%-include('../partials/navbar')%>
-    <%-include('../partials/flash')%>
+<%-include('../partials/header',{title: "Notifications"})%>
     <h1>Notifications</h1>
     <%notifications.sort(function(a,b) { return b.createdOn-a.createdOn;})%>
     <%for(let notification of notifications){%>
-        <div><%=notification.description%> on <%=notification.createdOn.toLocaleString()%></div>
-        <%if(notification.category=="enroll" && !notification.isResolved){%>
-            <a href="/notifications/<%=notification._id%>?toAccept=true">Accept</a>
-            <a href="/notifications/<%=notification._id%>?toAccept=false">Decline</a>
-        <%}else if(notification.category=="message"){%>
-            <p>Dismiss</p>
-        <%}%>
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="card-text">
+                    <%=notification.description%> on <%=notification.createdOn.toLocaleString()%>
+
+                    <%if(notification.category=="enroll" && !notification.isResolved){%>
+                        <div class="row">
+                            <div class="col-auto">
+                                <a class="btn btn-success btn-sm" href="/notifications/<%=notification._id%>?toAccept=true">Accept</a>
+                            </div>
+                            <div class="col-md-auto">
+                                <a class="btn btn-danger btn-sm" href="/notifications/<%=notification._id%>?toAccept=false">Decline</a>
+                            </div>
+                        </div>
+                    <%}else if(notification.category=="message"){%>
+                        <p>Dismiss</p>
+                    <%}%>
+                </div>
+                
+            </div>
+        </div>
 
     <%}%>
-</body>
-</html>
+<%-include('../partials/footer')%>

@@ -1,31 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= course.name %> </title>
-</head>
-<body>
-    <%-include('../partials/navbar')%>
-    <%-include('../partials/flash')%>
+<%-include('../partials/header',{title: course.name})%>
     <h1><%=course.name%> </h1>
 
     <% if(currentUser && currentUser._id.equals(course.teacher._id)){ %> 
-        <a href="/courses/<%= course._id%>/edit">Edit</a>
-        <form action="/courses/<%= course._id%>?_method=DELETE" method="post">
-            <button>Delete</button>
-        </form>
-
-        <a href="/courses/<%= course._id%>/lectures/new">Add Lecture</a>
+        <div class="row mb-3">
+            <div class="col-md-auto">
+                <a class="btn btn-light" href="/courses/<%= course._id%>/lectures/new">Add Lecture</a>
+            </div>
+            <div class="col-md-auto">
+                <a class="btn btn-success" href="/courses/<%= course._id%>/edit">Edit</a>
+            </div>
+            <div class="col-md-auto">
+                <form action="/courses/<%= course._id%>?_method=DELETE" method="post">
+                    <button class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
     <%}else if(currentUser && !(course.teacher.equals(currentUser._id) || course.users.includes(currentUser._id))){%>
-        <form action="/courses/<%=course._id%>/enroll" method="POST">
-            <button>Enroll in Course</button> 
-        </form>
+        <div class="row mb-3">
+            <form action="/courses/<%=course._id%>/enroll" method="POST">
+                <button class="btn btn-primary">Enroll in Course</button> 
+            </form>
+        </div>
     <%}%>
 
     <%for(let lecture of course.lectures){%>
-        <div> <a href="/courses/<%= course._id%>/lectures/<%= lecture._id %>"><%=lecture.name%></a></div>
+        <div class="card mb-3"> 
+            <div class="card-body">
+                <a href="/courses/<%= course._id%>/lectures/<%= lecture._id %>"><%=lecture.name%></a>
+            </div>
+        </div>
     <%}%>
-</body>
-</html>
+ 
+    <%-include('../partials/footer')%>

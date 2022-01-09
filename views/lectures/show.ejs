@@ -1,25 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= lecture.name %> </title>
-</head>
-<body>
-    <%-include('../partials/navbar')%>
-    <%-include('../partials/flash')%>
+<%-include('../partials/header',{title: lecture.name})%>
     <h1><%=lecture.name%> </h1>
-    <% if(currentUser && currentUser._id.equals(course.teacher)){ %>
-    <a href="/courses/<%=course._id%>/lectures/<%=lecture._id%>/edit">Edit</a>
-    <form action="/courses/<%=course._id%>/lectures/<%=lecture._id%>?_method=DELETE" method="post">
-        <button>Delete</button>
-    </form>
-    <%}%>
     <%if(currentUser){%>
-    <a href="/courses/<%=course._id%>/lectures/<%= lecture._id %>/comments/new">Add a question</a>
+        <div class="row mb-3">
+            <div class="col-md-auto">
+                <a class="btn btn-light" href="/courses/<%=course._id%>/lectures/<%= lecture._id %>/comments/new">Add a question</a>
+            </div>
     <%}%>
+    <% if(currentUser && currentUser._id.equals(course.teacher)){ %>
+            <div class="col-md-auto">
+                <a class="btn btn-success" href="/courses/<%=course._id%>/lectures/<%=lecture._id%>/edit">Edit</a>
+            </div>
+            <div class="col-md-auto">
+                <form action="/courses/<%=course._id%>/lectures/<%=lecture._id%>?_method=DELETE" method="post">
+                    <button class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    <%}%>
+    
 
-    <%- include('../partials/printComments',{comments:lecture.comments,lecture,id: course._id}) %> 
-</body>
-</html>
+    <%- include('../partials/printComments',{comments:lecture.comments,lecture,id: course._id, qus:"true"}) %> 
+<%-include('../partials/footer')%>
