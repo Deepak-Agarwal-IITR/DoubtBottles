@@ -1,5 +1,7 @@
 const Course = require('./models/course')
 const Comment = require('./models/comment')
+const catchAsync = require("./utils/catchAsync");
+
 module.exports.isLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
         req.flash('error', 'You musted be signed in')
@@ -8,7 +10,7 @@ module.exports.isLoggedIn = (req, res, next) => {
     next();
 }
 
-module.exports.isTeacher = async(req,res,next) => {
+module.exports.isTeacher = catchAsync(async(req,res,next) => {
     const {id} = req.params;
     const course = await Course.findById(id);
     if(!course.teacher.equals(req.user._id)){
@@ -16,9 +18,9 @@ module.exports.isTeacher = async(req,res,next) => {
         return res.redirect(`/courses/${id}`);
     }
     next();
-}
+})
 
-module.exports.isCommentUser = async(req,res,next) => {
+module.exports.isCommentUser = catchAsync(async(req,res,next) => {
     const { id,lectureId,commentId } = req.params;
     const comment = await Comment.findById(commentId);
     if(!comment.user.equals(req.user._id)){
@@ -26,9 +28,9 @@ module.exports.isCommentUser = async(req,res,next) => {
         return res.redirect(`/courses/${id}/lectures/${lectureId}`);
     }
     next();
-}
+})
 
-module.exports.isEnrolledInCourse = async (req, res, next) => {
+module.exports.isEnrolledInCourse = catchAsync(async (req, res, next) => {
     const { id } = req.params;
     const course = await Course.findById(id);
     if(!(course.users.includes(req.user._id) || course.teacher.equals(req.user._id))){
@@ -36,9 +38,9 @@ module.exports.isEnrolledInCourse = async (req, res, next) => {
         return res.redirect(`/courses/${id}`);
     }
     next();
-}
+})
 
-module.exports.isAlreadyEnrolled = async (req, res, next) => {
+module.exports.isAlreadyEnrolled = catchAsync(async (req, res, next) => {
     const { id } = req.params;
     const course = await Course.findById(id);
     if ((course.users.includes(req.user._id) || course.teacher.equals(req.user._id))) {
@@ -46,4 +48,4 @@ module.exports.isAlreadyEnrolled = async (req, res, next) => {
         return res.redirect(`/courses/${id}`);
     }
     next();
-}
+})
