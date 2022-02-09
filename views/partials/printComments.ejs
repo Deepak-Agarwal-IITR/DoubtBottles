@@ -6,7 +6,7 @@
         
         <% comments.forEach(function(comment){%>
         <li class="list-group-item 
-            <%if("true"===qus){ %>
+            <%if("lecture"===parent){ %>
                 bg-success" style="--bs-bg-opacity: .4;
             <% } %>">
 
@@ -51,14 +51,20 @@
                     <a class="btn btn-success btn-sm" href="/courses/<%=id %>/lectures/<%= lecture._id%>/comments/<%= comment._id %>/edit">Edit</a> 
                 </div>
                 <div class="col-auto">
-                    <form action="/courses/<%=id %>/lectures/<%= lecture._id%>/comments/<%= comment._id %>?_method=DELETE" method="post">
-                        <button class="btn btn-danger btn-sm">Delete</button>
-                    </form>
+                    <% if(parent==="lecture"){%> 
+                        <form action="/courses/<%=id %>/lectures/<%= lecture._id%>/comments/<%= comment._id %>?_method=DELETE" method="post">
+                            <button class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    <% }else{ %>
+                        <form action="/courses/<%=id %>/lectures/<%= lecture._id%>/comments/<%=parent._id %>/<%= comment._id %>?_method=DELETE" method="post">
+                            <button class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    <% } %> 
                 </div>
                 <% } %> 
                 
             </div>
-            <%- include('printComments',{comments:comment.comments,lecture,id,qus:"false"}) %>
+            <%- include('printComments',{comments:comment.comments,lecture,id,parent:comment}) %>
         </li>
         <%}) %> 
     <% if(comments.length){%>

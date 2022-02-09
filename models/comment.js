@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
-
 const commentSchema = new Schema({
     topic: {
         type: String,
@@ -39,5 +38,13 @@ commentSchema
     .pre('findOne',autoPopulateComment)
     .pre('find', autoPopulateComment)
     .pre('findById', autoPopulateComment)
+
     
+commentSchema.post('findOneAndDelete', async function(doc) {
+    if(doc){
+        doc.comments.forEach(async (comment)=>{
+            await this.model.findByIdAndDelete(comment);         
+        })
+    }
+})
 module.exports = mongoose.model('Comment',commentSchema)

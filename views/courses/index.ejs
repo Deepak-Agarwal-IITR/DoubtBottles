@@ -22,7 +22,7 @@
                         <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                         <div class="row">
                             <p class="card-text col-md-6"><small class="text-muted">Teacher: <%= course.teacher.username %></small></p>
-                            <p class="card-text col-md-6"><small class="text-muted"><%= course.users.length%> students</small></p>
+                            <p class="card-text col-md-6"><small class="text-muted"><%= course.users.length%> <%= course.users.length>1?"students":"student" %></small></p>
                         </div>
                     </div>
                     <div class="card-footer">
