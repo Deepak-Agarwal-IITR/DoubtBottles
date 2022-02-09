@@ -19,5 +19,5 @@
     <%}%>
     
 
-    <%- include('../partials/printComments',{comments:lecture.comments,lecture,id: course._id, qus:"true"}) %> 
+    <%- include('../partials/printComments',{comments:lecture.comments,lecture,id: course._id, parent:"lecture"}) %> 
 <%-include('../partials/footer')%>

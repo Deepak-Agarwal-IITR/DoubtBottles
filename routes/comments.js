@@ -76,11 +76,19 @@ router.route('/:commentId', isLoggedIn,isEnrolledInCourse)
     })
     .delete(isCommentUser,async (req, res) => {
         const { id, lectureId, commentId } = req.params
+        await Lecture.findByIdAndUpdate(lectureId,{$pull:{comments:commentId}});
         await Comment.findByIdAndDelete(commentId);
         req.flash('success', "Deleted Comment")
         res.redirect(`/courses/${id}/lectures/${lectureId}`)
     })
 
+router.delete("/:parentId/:commentId",isLoggedIn,isEnrolledInCourse,isCommentUser,async (req,res)=>{
+    const { id, lectureId, parentId,commentId } = req.params
+    await Comment.findByIdAndUpdate(parentId,{$pull:{comments:commentId}});
+    await Comment.findByIdAndDelete(commentId);
+    req.flash('success', "Deleted Comment")
+    res.redirect(`/courses/${id}/lectures/${lectureId}`)
+})
     
 router.get('/:commentId/reply', isLoggedIn,isEnrolledInCourse, (req, res) => {
     const { id, lectureId,commentId } = req.params

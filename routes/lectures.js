@@ -37,6 +37,7 @@ router.route("/:lectureId")
     })
     .delete(isLoggedIn,isTeacher,async (req, res) => {
         const { id ,lectureId} = req.params
+        await Course.findByIdAndUpdate(id,{$pull: {lectures:lectureId}});
         await Lecture.findByIdAndDelete(lectureId)
         req.flash('success', "Deleted Lecture")
         res.redirect(`/courses/${id}`)
