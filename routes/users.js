@@ -7,7 +7,7 @@ const { isLoggedIn } = require('../middleware')
 
 router.route('/register')
     .get(users.renderRegisterForm)
-    .post(users.register)
+    .post(catchAsync(users.register))
 
 router.route('/login')
     .get(users.renderLoginForm)
@@ -15,6 +15,6 @@ router.route('/login')
 
 router.get('/logout',users.logout)
 
-router.get('/notifications', isLoggedIn, users.showAllNotifications)
-router.get('/notifications/:id',isLoggedIn,users.resolveNotification);
+router.get('/notifications', isLoggedIn, catchAsync(users.showAllNotifications))
+router.get('/notifications/:id',isLoggedIn,catchAsync(users.resolveNotification));
 module.exports = router;
