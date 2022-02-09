@@ -15,6 +15,8 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local')
 
 const User = require('./models/user')
+const ExpressError = require('./utils/ExpressError');
+
 mongoose.connect('mongodb://localhost:27017/doubtapp', {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -62,6 +64,17 @@ app.use('/courses/:id/lectures', lectureRouter)
 app.use('/courses/:id/lectures/:lectureId/comments',commentRouter)
 app.use('/',userRouter)
 
+app.all('*', (req, res, next) => {
+    console.log("inside *")
+    next(new ExpressError('Page Not Found', 404));
+});
+
+app.use((err, req, res, next) => {
+    console.log("inside use")
+    const { statusCode = 500 } = err;
+    if (!err.message) err.message = 'Oh No, Something went wrong';
+    res.status(statusCode).render('error', { err });
+});
 
 app.listen(8080, () => {
     console.log("Listening on 8080")
