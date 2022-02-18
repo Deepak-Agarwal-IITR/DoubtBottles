@@ -3,10 +3,10 @@ const Schema = mongoose.Schema;
 const commentSchema = new Schema({
     topic: {
         type: String,
-        required: true,
     },
     text:{
-        type: String
+        type: String,
+        required: true,
     },
     comments: [{
         type: Schema.Types.ObjectId,

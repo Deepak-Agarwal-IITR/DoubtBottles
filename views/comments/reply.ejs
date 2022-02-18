@@ -1,8 +1,8 @@
 <%-include('../partials/header',{title: "Reply"})%>
     <h1>Reply</h1>
     <form action="/courses/<%=id%>/lectures/<%=lectureId%>/comments/<%=commentId %>" method="post">
-        <label for="topic">Topic: </label>
-        <input type="text" name="comment[topic]" id="topic">
+        <label for="text">Text: </label>
+        <input class="form-control" type="text" name="comment[text]" id="text">
         <button>Add</button>
     </form>
 <%-include('../partials/footer')%>

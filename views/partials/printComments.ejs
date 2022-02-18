@@ -14,9 +14,15 @@
                      mb-3
                 <% } %>">                
                 <div class="row">
+                    <% if(comment.topic){%> 
+                        <h5 class="col-md">
+                            <%= comment.topic %>
+                        </h5>
+                        <hr>
+                    <% } %> 
                     <div class="col-md">
-                        <%= comment.topic %>
-                    </div> 
+                        <%=comment.text%> 
+                    </div>
                     <div class="col-md d-flex justify-content-end">
                         -By <%=comment.user.username%> on <%=comment.createdOn.toLocaleString()%>
                     </div>
