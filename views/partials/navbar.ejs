@@ -6,11 +6,11 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <div class="navbar-nav">
-                <a class="nav-link" href="/">Home</a>
-                <a class="nav-link" href="/courses">Courses</a>
-            </div>
-            <div class="navbar-nav ml-auto">
+            <ul class="navbar-nav mt-0 me-auto">
+                <li><a class="nav-link" href="/">Home</a></li>
+                <li><a class="nav-link" href="/courses">Courses</a></li>
+            </ul>
+            <ul class="navbar-nav mt-0 me-0">
                 <% if(!currentUser){%>
                 <div class="navbar-nav">
                     <a class="nav-link" href="/login">Login</a>
@@ -24,7 +24,7 @@
                     <a class="nav-link" href="/logout">Log Out</a>
                 </div>
                 <%}%>
-            </div>
+            </ul>
         </div>
     </div>
 </nav>
