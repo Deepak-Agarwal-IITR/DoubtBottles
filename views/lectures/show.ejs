@@ -1,5 +1,6 @@
 <%-include('../partials/header',{title: lecture.name})%>
     <h1><%=lecture.name%> </h1>
+    <div><%= lecture.description %></div>
     <%if(currentUser){%>
         <div class="row mb-3">
             <div class="col-md-auto">
@@ -17,7 +18,5 @@
             </div>
         </div>
     <%}%>
-    
-
     <%- include('../partials/printComments',{comments:lecture.comments,lecture,id: course._id, parent:"lecture"}) %> 
 <%-include('../partials/footer')%>

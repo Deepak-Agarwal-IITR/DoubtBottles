@@ -26,8 +26,12 @@
     <%for(let lecture of course.lectures){%>
         <div class="card mb-3"> 
             <div class="card-body">
-                <a href="/courses/<%= course._id%>/lectures/<%= lecture._id %>"><%=lecture.name%></a>
+                <h5 class="card-title"><a href="/courses/<%= course._id%>/lectures/<%= lecture._id %>"><%=lecture.name%></a></h5>
+                <div class="card-text">
+                    <%=lecture.description%>
+                </div>
             </div>
+           
         </div>
     <%}%>
  
