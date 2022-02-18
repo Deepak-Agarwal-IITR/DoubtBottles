@@ -18,13 +18,13 @@
                         <h5 class="col-md">
                             <%= comment.topic %>
                         </h5>
+                        <div class="col-md d-flex justify-content-end">
+                            -By <%=comment.user.username%> on <%=comment.createdOn.toLocaleString()%>
+                        </div>
                         <hr>
                     <% } %> 
-                    <div class="col-md">
+                    <div class="col-md mb-3">
                         <%=comment.text%> 
-                    </div>
-                    <div class="col-md d-flex justify-content-end">
-                        -By <%=comment.user.username%> on <%=comment.createdOn.toLocaleString()%>
                     </div>
                 </div>                    
                 <%if(currentUser){%>
@@ -68,7 +68,11 @@
                     <% } %> 
                 </div>
                 <% } %> 
-                
+                <% if(parent!=="lecture"){ %> 
+                <div class="col-md d-flex justify-content-end">
+                    -By <%=comment.user.username%> on <%=comment.createdOn.toLocaleString()%>
+                </div>
+                <% } %> 
             </div>
             <%- include('printComments',{comments:comment.comments,lecture,id,parent:comment}) %>
         </li>
