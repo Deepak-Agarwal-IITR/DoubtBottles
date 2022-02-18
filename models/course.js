@@ -7,9 +7,6 @@ const courseSchema = new Schema({
         type: String,
         required: true
     },
-    code:{
-        type:String
-    },
     lectures: [{
         type: Schema.Types.ObjectId,
         ref: 'Lecture'
