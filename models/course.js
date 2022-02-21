@@ -21,8 +21,13 @@ const courseSchema = new Schema({
     users:[{
         type:Schema.Types.ObjectId,
         ref:'User'
-    }]
-
+    }],
+    images: [
+        {
+            url: String,
+            filename: String
+        }
+    ]
 })
 
 courseSchema.post('findOneAndDelete', async function(doc) {

@@ -3,9 +3,14 @@ const router = express.Router();
 const { isLoggedIn,isTeacher,isAlreadyEnrolled } = require('../middleware')
 const courses = require("../controllers/courses");
 const catchAsync = require('../utils/catchAsync')
+
+const multer = require('multer');
+const { storage } = require('../cloudinary');
+const upload = multer({ storage });
+
 router.route('/')
     .get(catchAsync(courses.showAllCourses))
-    .post(isLoggedIn, catchAsync(courses.createNewCourse))
+    .post(isLoggedIn, upload.array('image'),catchAsync(courses.createNewCourse))
 
 router.get('/new',isLoggedIn, courses.renderNewCourseForm)
 
