@@ -1,47 +1,37 @@
 <%-include('../partials/header',{title: course.name})%>
-    <link rel="stylesheet" href="/stylesheets/sidebar.css">
-    <div class="d-flex flex-row h-100">
-        <div class="sidebar m-0 px-0 list-group">
-            <a href="/courses/<%=course._id%>" class="list-group-item active"><i class='fas fa-book-reader'></i><span class="sidebar-item"> Lectures</span> </a>
-            <a href="/courses/<%=course._id%>/announcements"><i class="fas fa-bullhorn"></i><span class="sidebar-item"> Announcements</span> </a>
-            <a href="/courses/<%=course._id%>/polls"><i class='fas fa-poll'></i><span class="sidebar-item"> Polls</span> </a>
-            <a href="/courses/<%=course._id%>/settings"><i class="bi bi-gear"></i><span class="sidebar-item"> Settings</span> </a>
+<%-include('../partials/sidebar',{active:"lectures",courseId:course._id}) %> 
+<h1> <%=course.name%> </h1>
+<% if(currentUser && currentUser._id.equals(course.teacher._id)){ %> 
+    <div class="row mb-3">
+        <div class="col-auto">
+            <a class="btn btn-light" href="/courses/<%= course._id%>/lectures/new">Add Lecture</a>
         </div>
-        <div class="main flex-grow-1 px-3">
-            <h1> <%=course.name%> </h1>
-
-            <% if(currentUser && currentUser._id.equals(course.teacher._id)){ %> 
-                <div class="row mb-3">
-                    <div class="col-auto">
-                        <a class="btn btn-light" href="/courses/<%= course._id%>/lectures/new">Add Lecture</a>
-                    </div>
-                    <div class="col-auto">
-                        <a class="btn btn-success" href="/courses/<%= course._id%>/edit">Edit</a>
-                    </div>
-                    <div class="col-auto">
-                        <form action="/courses/<%= course._id%>?_method=DELETE" method="post">
-                            <button class="btn btn-danger">Delete</button>
-                        </form>
-                    </div>
-                </div>
-            <%}else if(currentUser && !(course.teacher.equals(currentUser._id) || course.users.includes(currentUser._id))){%>
-                <div class="row mb-3">
-                    <form action="/courses/<%=course._id%>/enroll" method="POST">
-                        <button class="btn btn-primary">Enroll in Course</button> 
-                    </form>
-                </div>
-            <%}%>
-
-            <%for(let lecture of course.lectures){%>
-                <div class="card mb-3"> 
-                    <div class="card-body">
-                        <h5 class="card-title"><a href="/courses/<%= course._id%>/lectures/<%= lecture._id %>"><%=lecture.name%></a></h5>
-                        <div class="card-text">
-                            <%=lecture.description%>
-                        </div>
-                    </div>
-                </div>
-            <%}%>
+        <div class="col-auto">
+            <a class="btn btn-success" href="/courses/<%= course._id%>/edit">Edit</a>
+        </div>
+        <div class="col-auto">
+            <form action="/courses/<%= course._id%>?_method=DELETE" method="post">
+                <button class="btn btn-danger">Delete</button>
+            </form>
         </div>
     </div>
+<%}else if(currentUser && !(course.teacher.equals(currentUser._id) || course.users.includes(currentUser._id))){%>
+    <div class="row mb-3">
+        <form action="/courses/<%=course._id%>/enroll" method="POST">
+            <button class="btn btn-primary">Enroll in Course</button> 
+        </form>
+    </div>
+<%}%>
+
+<%for(let lecture of course.lectures){%>
+    <div class="card mb-3"> 
+        <div class="card-body">
+            <h5 class="card-title"><a href="/courses/<%= course._id%>/lectures/<%= lecture._id %>"><%=lecture.name%></a></h5>
+            <div class="card-text">
+                <%=lecture.description%>
+            </div>
+        </div>
+    </div>
+<%}%>
+<%-include('../partials/sidebarFooter')%> 
 <%-include('../partials/footer')%>
