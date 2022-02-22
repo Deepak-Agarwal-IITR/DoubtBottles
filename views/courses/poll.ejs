@@ -1,0 +1,32 @@
+<%-include('../partials/header',{title: "polls"})%>
+
+<% for(let poll of polls){ %>
+    <div>
+        <%=poll.question %> 
+        <%=poll.createdOn.toLocaleString() %> 
+    </div>
+<% } %> 
+
+<h1>Make a Poll</h1>
+<form class="needs-validation" novalidate action="/courses/<%=courseId%>/polls" method="post">
+    <div class="mb-3">
+        <label for="question">Question: </label>
+        <textarea class="form-control" name="question" id="question" rows="2"></textarea>
+    </div>
+    <div class="mb-3">
+        <label for="answer[0]">answer[0]: </label>
+        <textarea class="form-control" name="answer[0]" id="answer[0]" rows="2"></textarea>
+    </div>
+    <div class="mb-3">
+        <label for="answer[1]">answer[1]: </label>
+        <textarea class="form-control" name="answer[1]" id="answer[1]" rows="2"></textarea>
+    </div>
+    <div class="mb-3">
+        <label for="endOn">End Poll on: </label>
+        <input class="form-control" type="date" name="endOn" id="endOn">
+    </div>
+    <div class="mb-3">
+        <button class="btn btn-success" type="submit">Submit</button>
+    </div>
+</form>
+<%-include('../partials/footer')%>

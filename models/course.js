@@ -1,7 +1,22 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 const Lecture = require('./lecture');
-
+  
+const pollSchema = new Schema({
+    question:{
+        type:String
+    },
+    answers:[{
+        type:String
+    }],
+    createdOn:{
+        type: Date
+    },
+    endTime:{
+        type: Date
+    }
+});
+    
 const announcementSchema = new Schema({
     description:{
         type: String
@@ -31,7 +46,8 @@ const courseSchema = new Schema({
         type:Schema.Types.ObjectId,
         ref:'User'
     }],
-    announcements:[announcementSchema]
+    announcements:[announcementSchema],
+    polls:[pollSchema]
 })
 
 courseSchema.post('findOneAndDelete', async function(doc) {
