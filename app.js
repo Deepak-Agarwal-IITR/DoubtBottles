@@ -8,6 +8,7 @@ const courseRouter = require("./routes/courses")
 const lectureRouter = require("./routes/lectures")
 const commentRouter = require("./routes/comments")
 const userRouter = require("./routes/users")
+const announcementRouter = require("./routes/announcements")
 
 const session = require('express-session')
 const flash = require('connect-flash')
@@ -61,6 +62,7 @@ app.use((req,res,next)=>{
 })
 app.use('/courses', courseRouter)
 app.use('/courses/:id/lectures', lectureRouter)
+app.use('/courses/:id/announcements',announcementRouter)
 app.use('/courses/:id/lectures/:lectureId/comments',commentRouter)
 app.use('/',userRouter)
 

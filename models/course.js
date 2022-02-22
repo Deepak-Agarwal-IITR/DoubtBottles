@@ -2,6 +2,15 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 const Lecture = require('./lecture');
 
+const announcementSchema = new Schema({
+    description:{
+        type: String
+    },
+    createdOn:{
+        type: Date
+    }
+});
+
 const courseSchema = new Schema({
     name:{
         type: String,
@@ -21,8 +30,8 @@ const courseSchema = new Schema({
     users:[{
         type:Schema.Types.ObjectId,
         ref:'User'
-    }]
-
+    }],
+    announcements:[announcementSchema]
 })
 
 courseSchema.post('findOneAndDelete', async function(doc) {
