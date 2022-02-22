@@ -1,0 +1,17 @@
+<link rel="stylesheet" href="/stylesheets/sidebar.css">
+    <div class="d-flex flex-row h-100">
+        <div class="sidebar m-0 px-0 list-group">
+            <a href="/courses/<%=courseId%>" class="list-group-item <%=active===`lectures`?`active`:``%>">
+                <i class='fas fa-book-reader'></i><span class="sidebar-item"> Lectures</span> 
+            </a>
+            <a href="/courses/<%=courseId%>/announcements" class="list-group-item <%=active===`announcements`?`active`:``%>">
+                <i class="fas fa-bullhorn"></i><span class="sidebar-item"> Announcements</span> 
+            </a>
+            <a href="/courses/<%=courseId%>/polls" class="list-group-item <%=active===`polls`?`active`:``%>"><i class='fas fa-poll'>
+                </i><span class="sidebar-item"> Polls</span> 
+            </a>
+            <a href="/courses/<%=courseId%>/settings" class="list-group-item <%=active===`settings`?`active`:``%>"><i class="bi bi-gear">
+                </i><span class="sidebar-item"> Settings</span> 
+            </a>
+        </div>
+        <div class="main flex-grow-1 px-3">
