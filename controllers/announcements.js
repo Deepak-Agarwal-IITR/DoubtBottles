@@ -13,7 +13,7 @@ module.exports.createNewAnnouncement = async (req,res)=>{
     await course.save();
 
     const notification = new Notification({
-        description: `An announcement has been made in ${course.name}`, 
+        description: `An announcement has been made in <a href=/courses/${course._id}/announcements>${course.name}</a>`, 
         sender: req.user._id, 
         receivers: course.users, 
         category: 'announcement',

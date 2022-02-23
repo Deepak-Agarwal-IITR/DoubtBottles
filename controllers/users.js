@@ -59,7 +59,7 @@ module.exports.resolveNotification = async(req,res)=>{
         await notification.save();
 
         const sendNotification = new Notification({ 
-            description: `You have been enrolled in ${course.name} by ${receiver.username}.`, 
+            description: `You have been enrolled in <a href=/courses/${course._id}>${course.name}</a> by ${receiver.username}.`, 
             sender: req.user._id, 
             receivers: [notification.sender._id], 
             category: 'message',
@@ -74,7 +74,7 @@ module.exports.resolveNotification = async(req,res)=>{
         await notification.save();
 
         const sendNotification = new Notification({ 
-            description: `Your request for enrolling in ${course.name} by ${receiver.username} has been canceled.`, 
+            description: `Your request for enrolling in <a href=/courses/${course._id}>${course.name}</a> by ${receiver.username} has been canceled.`, 
             sender: req.user._id, 
             receivers: [notification.sender._id], 
             category: 'message',

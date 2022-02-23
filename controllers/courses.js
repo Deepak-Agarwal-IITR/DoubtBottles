@@ -57,7 +57,7 @@ module.exports.notifyTeacherForEnrollment = async (req, res) => {
     const course = await Course.findById(id);
 
     const notification = new Notification({ 
-        description: `${req.user.username} wants to enroll in Your Course: ${course.name}`, 
+        description: `${req.user.username} wants to enroll in Your Course: <a href=/courses/${course._id}>${course.name}</a>`, 
         sender: req.user._id, 
         receivers: [course.teacher], 
         course,
