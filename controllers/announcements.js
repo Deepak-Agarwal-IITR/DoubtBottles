@@ -1,4 +1,5 @@
 const Course = require("../models/course")
+const Notification = require("../models/notification")
 
 module.exports.createNewAnnouncement = async (req,res)=>{
     const {id} = req.params;
@@ -11,7 +12,17 @@ module.exports.createNewAnnouncement = async (req,res)=>{
     course.announcements.push(announcement);
     await course.save();
 
-    res.render("courses/announcement",{announcements: course.announcements,courseId:id})   
+    const notification = new Notification({
+        description: `An announcement has been made in ${course.name}`, 
+        sender: req.user._id, 
+        receivers: course.users, 
+        category: 'announcement',
+        createdOn : new Date(),
+        course
+    });
+    await notification.save();
+    req.flash("success","Announcement made successfully")
+    res.redirect(`/courses/${course._id}/announcements`)   
 }
 
 module.exports.showAnnouncements = async (req,res)=>{

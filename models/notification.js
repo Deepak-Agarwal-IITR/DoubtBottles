@@ -24,7 +24,7 @@ const notificationSchema = new Schema({
     },
     category: {
         type: String,
-        enum:["message","enroll"]
+        enum:["message","enroll","announcement","poll"]
     },
     createdOn:{
         type:Date
