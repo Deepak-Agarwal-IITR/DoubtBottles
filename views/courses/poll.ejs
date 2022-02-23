@@ -1,5 +1,5 @@
-<%-include('../partials/header',{title: "polls"})%>
-<%-include('../partials/sidebar',{active:"polls",courseId}) %> 
+<%-include('../partials/header',{title: "Polls"})%>
+<%-include('../partials/sidebar',{active:"polls",courseId:course._id}) %> 
 <% for(let poll of polls){ %>
     <div>
         <%=poll.question %> 
@@ -7,27 +7,31 @@
     </div>
 <% } %> 
 
-<h1>Make a Poll</h1>
-<form class="needs-validation" novalidate action="/courses/<%=courseId%>/polls" method="post">
-    <div class="mb-3">
-        <label for="question">Question: </label>
-        <textarea class="form-control" name="question" id="question" rows="2"></textarea>
+<% if(currentUser._id.toString()===course.teacher._id.toString()){ %> 
+    <div class="dropdown">
+        <div id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Conduct a Poll</div>
+        <form class="needs-validation dropdown-menu w-100 border-0" aria-labelledby="dLabel" novalidate action="/courses/<%=course._id%>/polls" method="post">
+            <div class="mb-3">
+                <label for="question">Question: </label>
+                <textarea class="form-control" name="question" id="question" rows="2"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="option[0]">option[0]: </label>
+                <textarea class="form-control" name="option[0]" id="option[0]" rows="2"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="option[1]">option[1]: </label>
+                <textarea class="form-control" name="option[1]" id="option[1]" rows="2"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="endOn">End Poll on: </label>
+                <input class="form-control" type="date" name="endOn" id="endOn">
+            </div>
+            <div class="mb-3">
+                <button class="btn btn-success" type="submit">Submit</button>
+            </div>
+        </form>
     </div>
-    <div class="mb-3">
-        <label for="answer[0]">answer[0]: </label>
-        <textarea class="form-control" name="answer[0]" id="answer[0]" rows="2"></textarea>
-    </div>
-    <div class="mb-3">
-        <label for="answer[1]">answer[1]: </label>
-        <textarea class="form-control" name="answer[1]" id="answer[1]" rows="2"></textarea>
-    </div>
-    <div class="mb-3">
-        <label for="endOn">End Poll on: </label>
-        <input class="form-control" type="date" name="endOn" id="endOn">
-    </div>
-    <div class="mb-3">
-        <button class="btn btn-success" type="submit">Submit</button>
-    </div>
-</form>
+<% } %> 
 <%-include('../partials/sidebarFooter')%> 
 <%-include('../partials/footer')%>

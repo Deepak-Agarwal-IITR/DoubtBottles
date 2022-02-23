@@ -28,5 +28,5 @@ module.exports.createNewAnnouncement = async (req,res)=>{
 module.exports.showAnnouncements = async (req,res)=>{
     const {id} = req.params;
     const course = await Course.findById(id);
-    res.render("courses/announcement",{announcements: course.announcements,courseId:id})
+    res.render("courses/announcement",{announcements: course.announcements,course})
 }
