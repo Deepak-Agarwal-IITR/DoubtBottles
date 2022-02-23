@@ -15,7 +15,7 @@ module.exports.createNewPoll = async (req,res)=>{
     await course.save();
 
     const notification = new Notification({
-        description: `A new poll is being conducted in ${course.name}.`, 
+        description: `A new poll is being conducted in <a href=/courses/${course._id}/polls>${course.name}</a>.`, 
         sender: req.user._id, 
         receivers: course.users, 
         category: 'poll',
