@@ -7,12 +7,18 @@ const pollSchema = new Schema({
         type:String
     },
     options:[{
-        type:String
+        text:{
+            type:String
+        },
+        users:[{
+            type:Schema.Types.ObjectId,
+            ref: 'User'
+        }]
     }],
     createdOn:{
         type: Date
     },
-    endTime:{
+    endOn:{
         type: Date
     }
 });
