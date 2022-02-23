@@ -16,8 +16,7 @@ router.route('/:commentId', isLoggedIn,isEnrolledInCourse)
     .delete(isCommentUser,catchAsync(comments.deleteQuestion))
 
 router.delete("/:parentId/:commentId",isLoggedIn,isEnrolledInCourse,isCommentUser,catchAsync(comments.deleteReply))
-    
-router.get('/:commentId/reply', isLoggedIn,isEnrolledInCourse, comments.renderReplyForm)
+
 router.get('/:commentId/edit', isLoggedIn,isEnrolledInCourse,isCommentUser, catchAsync(comments.renderEditCommentForm))
 
 module.exports = router;
