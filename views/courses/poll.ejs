@@ -8,9 +8,10 @@
 <% } %> 
 
 <% if(currentUser._id.toString()===course.teacher._id.toString()){ %> 
-    <div class="dropdown">
-        <div id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Conduct a Poll</div>
-        <form class="needs-validation dropdown-menu w-100 border-0" aria-labelledby="dLabel" novalidate action="/courses/<%=course._id%>/polls" method="post">
+    <div type="button" data-toggle="collapse" data-target="#collapseExample"
+    aria-expanded="false" aria-controls="collapseExample">Conduct a Poll</div>
+    <div class="collapse" id="collapseExample">
+        <form class="needs-validation w-100 border-0" novalidate action="/courses/<%=course._id%>/polls" method="post">
             <div class="mb-3">
                 <label for="question">Question: </label>
                 <textarea class="form-control" name="question" id="question" rows="2"></textarea>

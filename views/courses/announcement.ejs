@@ -8,9 +8,10 @@
 <% } %> 
 
 <% if(currentUser._id.toString()===course.teacher._id.toString()){ %> 
-    <div class="dropdown">
-        <div id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Make an Announcement</div>
-        <form class="needs-validation dropdown-menu w-100 border-0" aria-labelledby="dLabel" novalidate action="/courses/<%=course._id%>/announcements" method="post">
+    <div type="button" data-toggle="collapse" data-target="#collapseExample"
+    aria-expanded="false" aria-controls="collapseExample">Make an Announcement</div>
+    <div class="collapse" id="collapseExample">
+        <form class="needs-validation w-100 border-0"novalidate action="/courses/<%=course._id%>/announcements" method="post">
             <div class="mb-3">
                 <label for="description">Description: </label>
                 <textarea class="form-control" name="description" id="description" rows="3"></textarea>
@@ -21,5 +22,22 @@
         </form>
     </div>
 <% } %> 
+
+<!-- <p>
+    <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
+        aria-controls="collapseExample">
+        Link with href
+    </a>
+    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample"
+        aria-expanded="false" aria-controls="collapseExample">
+        Button with data-target
+    </button>
+</p>
+<div class="collapse" id="collapseExample">
+    <div class="card card-body">
+        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim
+        keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+    </div>
+</div> -->
 <%-include('../partials/sidebarFooter')%> 
 <%-include('../partials/footer')%>
