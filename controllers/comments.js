@@ -93,8 +93,3 @@ module.exports.deleteReply = async (req,res)=>{
     req.flash('success', "Deleted Comment")
     res.redirect(`/courses/${id}/lectures/${lectureId}`)
 };
-
-module.exports.renderReplyForm = (req, res) => {
-    const { id, lectureId,commentId } = req.params
-    res.render("comments/reply", { id, lectureId,commentId })
-};
