@@ -55,11 +55,15 @@ module.exports.deleteCourse = async (req, res) => {
 module.exports.notifyTeacherForEnrollment = async (req, res) => {
     const { id } = req.params;
     const course = await Course.findById(id);
-    const teacher = await User.findById(course.teacher);
-    const notification = new Notification({ description: `${req.user.username} wants to enroll in Your Course: ${course.name}`, sender: req.user._id, receiver: teacher._id, course,category:"enroll"});
-    notification.createdOn = new Date();
-    teacher.notifications.push(notification);
-    await teacher.save();
+
+    const notification = new Notification({ 
+        description: `${req.user.username} wants to enroll in Your Course: ${course.name}`, 
+        sender: req.user._id, 
+        receivers: [course.teacher], 
+        course,
+        category:"enroll",
+        createdOn: new Date()
+    });
     await notification.save();
 
     req.flash('success', "Notified the teacher, wait for the response");

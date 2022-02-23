@@ -41,29 +41,31 @@ module.exports.logout = (req,res)=>{
 };
 
 module.exports.showAllNotifications = async(req, res) => {
-    const user = await User.findById(req.user._id).populate('notifications');
-    res.render('users/notifications',{notifications: user.notifications});
+    const notifications = await Notification.find({receivers: req.user._id});
+    res.render('users/notifications',{notifications});
 };
 
 module.exports.resolveNotification = async(req,res)=>{
     const toAccept = req.query.toAccept;
     const notification = await Notification.findById(req.params.id);
-    
     const course = await Course.findById(notification.course._id);
     const sender = await User.findById(notification.sender._id);
-    const receiver = await User.findById(notification.receiver._id);
-
+    const receiver = await User.findById(req.user._id);
+    
     if(toAccept=="true"){
         course.users.push(notification.sender);
         await course.save();
         notification.isResolved = true;
         await notification.save();
 
-        const sendNotification = new Notification({ description: `You have been enrolled in ${course.name} by ${receiver.username}.`, sender: receiver._id, receiver: sender._id, category: 'message' });
-        sendNotification.createdOn = new Date();
-        sender.notifications.push(sendNotification);
+        const sendNotification = new Notification({ 
+            description: `You have been enrolled in ${course.name} by ${receiver.username}.`, 
+            sender: req.user._id, 
+            receivers: [notification.sender._id], 
+            category: 'message',
+            createdOn : new Date() 
+        });
         await sendNotification.save();
-        await sender.save();
 
         req.flash('success',`${sender.username} has been Enrolled in the course: ${course.name}.`)
         res.redirect('/notifications');
@@ -71,11 +73,14 @@ module.exports.resolveNotification = async(req,res)=>{
         notification.isResolved = true;
         await notification.save();
 
-        const sendNotification = new Notification({ description: `Your request for enrolling in ${course.name} by ${receiver.username} has been canceled.`, sender: receiver._id, receiver: sender._id, category: 'message' });
-        sendNotification.createdOn = new Date();
-        sender.notifications.push(sendNotification);
+        const sendNotification = new Notification({ 
+            description: `Your request for enrolling in ${course.name} by ${receiver.username} has been canceled.`, 
+            sender: req.user._id, 
+            receivers: [notification.sender._id], 
+            category: 'message',
+            createdOn : new Date() 
+        });
         await sendNotification.save();
-        await sender.save();
         
         req.flash('success',`${sender.username} request has been canceled for the course: ${course.name}.`)
         res.redirect('/notifications');

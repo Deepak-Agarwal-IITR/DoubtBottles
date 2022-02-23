@@ -10,10 +10,10 @@ const notificationSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
-    receiver: {
+    receivers: [{
         type: Schema.Types.ObjectId,
         ref: 'User'
-    },
+    }],
     course: {
         type: Schema.Types.ObjectId,
         ref:'Course'
