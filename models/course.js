@@ -53,7 +53,13 @@ const courseSchema = new Schema({
         ref:'User'
     }],
     announcements:[announcementSchema],
-    polls:[pollSchema]
+    polls:[pollSchema],
+    images: [
+        {
+            url: String,
+            filename: String
+        }
+    ]
 })
 
 courseSchema.post('findOneAndDelete', async function(doc) {
