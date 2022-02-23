@@ -1,4 +1,5 @@
 const Course = require("../models/course")
+const Notification = require("../models/notification")
 
 module.exports.createNewPoll = async (req,res)=>{
     const {id} = req.params;
@@ -13,7 +14,17 @@ module.exports.createNewPoll = async (req,res)=>{
     course.polls.push(poll);
     await course.save();
 
-    res.render("courses/poll",{polls: course.polls,courseId:id})   
+    const notification = new Notification({
+        description: `A new poll is being conducted in ${course.name}.`, 
+        sender: req.user._id, 
+        receivers: course.users, 
+        category: 'poll',
+        createdOn : new Date(),
+        course
+    });
+    await notification.save();
+    req.flash("success","Poll made successfully")
+    res.redirect(`/courses/${course._id}/polls`) 
 }
 
 module.exports.showPolls = async (req,res)=>{
