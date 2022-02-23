@@ -6,7 +6,7 @@ const pollSchema = new Schema({
     question:{
         type:String
     },
-    answers:[{
+    options:[{
         type:String
     }],
     createdOn:{

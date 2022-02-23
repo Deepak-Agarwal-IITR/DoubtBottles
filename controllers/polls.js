@@ -30,5 +30,5 @@ module.exports.createNewPoll = async (req,res)=>{
 module.exports.showPolls = async (req,res)=>{
     const {id} = req.params;
     const course = await Course.findById(id);
-    res.render("courses/poll",{polls: course.polls,courseId:id})
+    res.render("courses/poll",{polls: course.polls,course})
 }
