@@ -5,8 +5,8 @@ const courses = require("../controllers/courses");
 const catchAsync = require('../utils/catchAsync')
 
 const multer = require('multer');
-const { storage } = require('../cloudinary');
-const upload = multer({ storage });
+const { courseImageStorage } = require('../cloudinary');
+const upload = multer({ storage:courseImageStorage });
 
 router.route('/')
     .get(catchAsync(courses.showAllCourses))
