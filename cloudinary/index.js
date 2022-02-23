@@ -7,7 +7,7 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_SECRET
 });
 
-const storage = new CloudinaryStorage({
+const courseImageStorage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params:{
         folder: 'DoubtApp/Course',
@@ -17,5 +17,5 @@ const storage = new CloudinaryStorage({
 
 module.exports = {
     cloudinary,
-    storage
+    courseImageStorage
 }
