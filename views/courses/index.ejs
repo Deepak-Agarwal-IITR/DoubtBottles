@@ -12,10 +12,12 @@
     <%for(let course of courses){%>
 
         <div class="card mb-3">
-            <div class="row g-0">
-                <!-- <div class="col-md-4">
-                    <img src="<%#course.images[0].url %> " class="img-fluid rounded-start" alt="">
-                </div> -->
+            <div class="g-0 row">
+                <div class="col-md-4">
+                    <div class="w-100">
+                        <img src="<%=course.image.url %>" class="img-fluid rounded-start" alt="">
+                    </div>
+                </div>
                 <div class="col-md-8">
                     <div class="card-body">
                         <h5 class="card-title"><%=course.name%></h5>
@@ -41,7 +43,7 @@
                     </div>
                 </div>
             </div>
-          </div>
+        </div>
     <%}%>
     
 <%-include('../partials/footer')%>
