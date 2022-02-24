@@ -1,6 +1,7 @@
 const Course = require("../models/course")
 const User = require("../models/user");
 const Notification = require("../models/notification")
+const { cloudinary } = require("../cloudinary");
 
 module.exports.showAllCourses = async(req, res) => {
     const courses = await Course.find({}).populate('teacher');
@@ -45,7 +46,13 @@ module.exports.renderEditCourseForm = async (req, res) => {
 module.exports.editCourse = async(req, res) => {
     const { id } = req.params
     const course = await Course.findByIdAndUpdate(id,{...req.body.course})
-     req.flash('success',"Updated course")
+    if(req.file){
+        if(course.image.filename)
+            await cloudinary.uploader.destroy(course.image.filename);
+        course.image = {url: req.file.path,filename:req.file.filename}
+    }
+    await course.save();
+    req.flash('success',"Updated course")
     res.redirect(`/courses/${id}`)
 }
 
