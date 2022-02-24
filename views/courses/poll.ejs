@@ -1,33 +1,5 @@
 <%-include('../partials/header',{title: "Polls"})%>
 <%-include('../partials/sidebar',{active:"polls",courseId:course._id}) %> 
-<% for(let poll of polls){ %>
-    <div class="card mb-2">
-        <div class="card-header">
-            <%=poll.question %> on
-            <%=poll.createdOn.toLocaleString() %> 
-        </div>
-        <div class="card-body p-3">
-            <form action="/courses/<%=course._id%>/polls/<%=poll._id%>" method="post">
-                <% for(let option of poll.options){ %> 
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="option" id="o<%=option._id%>" value="<%=option._id%>">
-                        <label class="form-check-label" for="o<%=option._id%>">
-                        <%= option.text %> 
-                        </label>
-                    </div>
-                <% } %> 
-                <hr class="my-2">
-                <div class="row">
-                    <button class="btn btn-success btn-sm col-auto">Vote</button>
-                    <div class="col-auto">
-                        End on <%=poll.endOn.toLocaleString() %> 
-                    </div>
-                </div>
-            </form>
-            
-        </div>
-    </div>
-<% } %> 
 
 <% if(currentUser._id.toString()===course.teacher._id.toString()){ %> 
     <div type="button" data-toggle="collapse" data-target="#collapseExample"
@@ -36,7 +8,7 @@
         <form class="needs-validation w-100 border-0" novalidate action="/courses/<%=course._id%>/polls" method="post">
             <div class="mb-3">
                 <label for="question">Question: </label>
-                <textarea class="form-control" name="question" id="question" rows="2"></textarea>
+                <textarea class="form-control" name="question" id="question" rows="2" required></textarea>
             </div>
             <div class="">
                 Options:
@@ -48,7 +20,7 @@
                             <input class="form-check-input" type="radio" disabled>
                         </div>
                     </div>
-                    <input type="text" class="form-control" name="options[]">
+                    <input type="text" class="form-control" name="options[]" required>
                     <div class="h-100 py-2 border">
                         <span class="bi-x-lg mx-2" onclick="removeOption(this)"></span>
                     </div>
@@ -59,7 +31,7 @@
                             <input class="form-check-input" type="radio" disabled>
                         </div>
                     </div>
-                    <input type="text" class="form-control" name="options[]">
+                    <input type="text" class="form-control" name="options[]" required>
                     <div class="h-100 py-2 border">
                         <span class="bi-x-lg mx-2" onclick="removeOption(this)"></span>
                     </div>
@@ -70,12 +42,53 @@
             </button>
             <div class="mb-3">
                 <label for="endOn">End Poll on: </label>
-                <input class="form-control" type="date" name="endOn" id="endOn">
+                <div class="row">
+                    <div class="col-6">
+                        <input class="form-control" type="date" name="endOn" id="endOn" required>
+                    </div>
+                    <div class="col-6">
+                        <input class="form-control" type="time" id="" name="endTime" required>
+                    </div>
+                </div>
             </div>
             <div class="mb-3">
                 <button class="btn btn-success" type="submit">Submit</button>
             </div>
         </form>
+    </div>
+    <br>
+<% } %> 
+
+<% for(let poll of polls){ %>
+    <div class="card mb-2">
+        <div class="card-header">
+            <%=poll.question %> on
+            <%=poll.createdOn.toLocaleString() %> 
+        </div>
+        <div class="card-body p-3">
+            <form action="/courses/<%=course._id%>/polls/<%=poll._id%>" method="post">
+                <% for(let option of poll.options){ %> 
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="option" id="o<%=option._id%>" value="<%=option._id%>" required 
+                                <%=(poll.marked || poll.endOn<new Date())?"disabled":"" %>  <%= (poll.marked===option._id)?"checked":"" %> >
+                        <% const votes = option.users.length %> 
+                        <label class="form-check-label" for="o<%=option._id%>"> 
+                            <%= option.text %> <%=(poll.marked ||(currentUser._id.toString()===course.teacher._id.toString()))?`(${votes} ${votes>1?"votes":"vote"})`:``%>
+                        </label>
+                    </div>
+                <% } %> 
+                <hr class="my-2">
+                <div class="row">
+                    <% if(!poll.marked && poll.endOn>new Date()){ %> 
+                        <button class="btn btn-success btn-sm col-auto">Vote</button>
+                    <% } %> 
+                    <div class="col-auto">
+                        <%= (poll.endOn<new Date())?"Ended":"End"%> on <%=poll.endOn.toLocaleString() %> 
+                    </div>
+                </div>
+            </form>
+            
+        </div>
     </div>
 <% } %> 
 
@@ -95,7 +108,7 @@
                     <input class="form-check-input" type="radio" disabled>
                 </div>
             </div>
-            <input type="text" class="form-control" name="options[]">
+            <input type="text" class="form-control" name="options[]" required>
             <div class="h-100 py-2 border">
                 <span class="bi-x-lg mx-2" onclick="removeOption(this)"></span>
             </div>
