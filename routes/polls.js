@@ -8,5 +8,7 @@ router.route('/')
     .get(isLoggedIn,isEnrolledInCourse,catchAsync(polls.showPolls))
     .post(isLoggedIn,isTeacher,catchAsync(polls.createNewPoll))
 
-
+router.route('/:pollId')
+    .post(isLoggedIn,isEnrolledInCourse,catchAsync(polls.addVote))
+    
 module.exports = router;
