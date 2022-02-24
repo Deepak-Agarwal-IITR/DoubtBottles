@@ -20,11 +20,13 @@ module.exports.createNewPoll = async (req,res)=>{
     }
     course.polls.push(poll);
     await course.save();
-
+    const receivers = course.users.map(function makeUser(user){
+        return {id:user};
+    });
     const notification = new Notification({
         description: `A new poll is being conducted in <a href=/courses/${course._id}/polls>${course.name}</a>.`, 
         sender: req.user._id, 
-        receivers: course.users, 
+        receivers, 
         category: 'poll',
         createdOn : new Date(),
         course

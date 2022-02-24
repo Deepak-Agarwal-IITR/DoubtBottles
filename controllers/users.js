@@ -41,7 +41,11 @@ module.exports.logout = (req,res)=>{
 };
 
 module.exports.showAllNotifications = async(req, res) => {
-    const notifications = await Notification.find({receivers: req.user._id});
+    const foundNotifications = await Notification.find({receivers:{ $elemMatch: { id: req.user._id } } });
+    const notifications = foundNotifications.map(function makeNoti(noti){
+        noti.isResolved =  noti.receivers.find(receiver => receiver.id.toString()===req.user._id.toString()).isResolved;
+        return noti;
+    });
     res.render('users/notifications',{notifications});
 };
 
@@ -55,13 +59,13 @@ module.exports.resolveNotification = async(req,res)=>{
     if(toAccept=="true"){
         course.users.push(notification.sender);
         await course.save();
-        notification.isResolved = true;
+        notification.receivers[0].isResolved = true;
         await notification.save();
 
         const sendNotification = new Notification({ 
             description: `You have been enrolled in <a href=/courses/${course._id}>${course.name}</a> by ${receiver.username}.`, 
             sender: req.user._id, 
-            receivers: [notification.sender._id], 
+            receivers: [{id: notification.sender._id}], 
             category: 'message',
             createdOn : new Date() 
         });
@@ -70,13 +74,13 @@ module.exports.resolveNotification = async(req,res)=>{
         req.flash('success',`${sender.username} has been Enrolled in the course: ${course.name}.`)
         res.redirect('/notifications');
     } else {
-        notification.isResolved = true;
+        notification.receivers[0].isResolved = true;
         await notification.save();
 
         const sendNotification = new Notification({ 
             description: `Your request for enrolling in <a href=/courses/${course._id}>${course.name}</a> by ${receiver.username} has been canceled.`, 
             sender: req.user._id, 
-            receivers: [notification.sender._id], 
+            receivers: [{id:notification.sender._id}], 
             category: 'message',
             createdOn : new Date() 
         });

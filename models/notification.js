@@ -11,16 +11,18 @@ const notificationSchema = new Schema({
         ref: 'User'
     },
     receivers: [{
-        type: Schema.Types.ObjectId,
-        ref: 'User'
+        id:{
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        isResolved:{
+            type: Boolean,
+            default: false
+        }
     }],
     course: {
         type: Schema.Types.ObjectId,
         ref:'Course'
-    },
-    isResolved:{
-        type: Boolean,
-        default: false
     },
     category: {
         type: String,
