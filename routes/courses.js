@@ -10,7 +10,7 @@ const upload = multer({ storage:courseImageStorage });
 
 router.route('/')
     .get(catchAsync(courses.showAllCourses))
-    .post(isLoggedIn, upload.array('image'),catchAsync(courses.createNewCourse))
+    .post(isLoggedIn, upload.single('image'),catchAsync(courses.createNewCourse))
 
 router.get('/new',isLoggedIn, courses.renderNewCourseForm)
 

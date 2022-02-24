@@ -9,12 +9,13 @@ module.exports.showAllCourses = async(req, res) => {
 };
 
 module.exports.createNewCourse = async(req, res) => {
-    //console.log(req.body,req.files)
     const course = new Course(req.body.course)
     course.teacher = req.user;
-    course.images = req.files.map(f => ({ url: f.path, filename: f.filename }));
+    if(req.file)
+        course.image = {url: req.file.path,filename:req.file.filename}
+    else
+        course.image = {url:"/images/course.jpg"}
     await course.save();
-    //console.log(course);
     req.flash('success',"Created a new course")
     res.redirect("/courses")
 };

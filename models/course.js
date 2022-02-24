@@ -54,12 +54,10 @@ const courseSchema = new Schema({
     }],
     announcements:[announcementSchema],
     polls:[pollSchema],
-    images: [
-        {
-            url: String,
-            filename: String
-        }
-    ]
+    image:{
+        url: String,
+        filename: String
+    }
 })
 
 courseSchema.post('findOneAndDelete', async function(doc) {
