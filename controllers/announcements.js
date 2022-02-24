@@ -11,11 +11,13 @@ module.exports.createNewAnnouncement = async (req,res)=>{
     }
     course.announcements.push(announcement);
     await course.save();
-
+    const receivers = course.users.map(function makeUser(user){
+        return {id:user};
+    });
     const notification = new Notification({
         description: `An announcement has been made in <a href=/courses/${course._id}/announcements>${course.name}</a>`, 
         sender: req.user._id, 
-        receivers: course.users, 
+        receivers, 
         category: 'announcement',
         createdOn : new Date(),
         course

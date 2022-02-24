@@ -58,11 +58,13 @@ module.exports.deleteCourse = async (req, res) => {
 module.exports.notifyTeacherForEnrollment = async (req, res) => {
     const { id } = req.params;
     const course = await Course.findById(id);
-
+    const receivers = [{
+        id: course.teacher
+    }]
     const notification = new Notification({ 
         description: `${req.user.username} wants to enroll in Your Course: <a href=/courses/${course._id}>${course.name}</a>`, 
         sender: req.user._id, 
-        receivers: [course.teacher], 
+        receivers, 
         course,
         category:"enroll",
         createdOn: new Date()
