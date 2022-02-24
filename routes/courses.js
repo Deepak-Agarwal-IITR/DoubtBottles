@@ -18,7 +18,7 @@ router.route('/my',isLoggedIn)
     .get(catchAsync(courses.showMyCourses))
 router.route('/:id')
     .get(catchAsync(courses.showCourse))
-    .put(isLoggedIn, isTeacher, catchAsync(courses.editCourse))
+    .put(isLoggedIn, isTeacher,upload.single('image'), catchAsync(courses.editCourse))
     .delete(isLoggedIn, isTeacher, catchAsync(courses.deleteCourse))
     
 router.get('/:id/edit', isLoggedIn, isTeacher, catchAsync(courses.renderEditCourseForm))

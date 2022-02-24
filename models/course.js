@@ -1,7 +1,8 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 const Lecture = require('./lecture');
-  
+const { cloudinary } = require("../cloudinary");
+
 const pollSchema = new Schema({
     question:{
         type:String
@@ -62,6 +63,9 @@ const courseSchema = new Schema({
 
 courseSchema.post('findOneAndDelete', async function(doc) {
     if(doc){
+        if(doc.image.filename){
+            await cloudinary.uploader.destroy(doc.image.filename);
+        }
         doc.lectures.forEach(async (lecture)=>{
             await Lecture.findByIdAndDelete(lecture);
         })
