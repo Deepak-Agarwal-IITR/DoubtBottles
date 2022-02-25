@@ -18,22 +18,18 @@ db.once("open", () => {
 
 const seedDB = async () => {
     
-    await Comment.deleteMany({});
-    console.log("Deleted comments")
     await Course.deleteMany({});
     console.log("Deleted courses")
-    await Lecture.deleteMany({});
-    console.log("Deleted lectures")
     await User.deleteMany({});
     console.log("Deleted users")
     await Notification.deleteMany({});
     console.log("Deleted notifications")
 
-    const user1 = new User({ username:"a" });
+    const user1 = new User({ username:"a@gmail.com" });
     const registeredUser1 = await User.register(user1, "a");
-    const user2 = new User({ username:"b" });
+    const user2 = new User({ username:"b@gmail.com" });
     const registeredUser2 = await User.register(user2, "b");
-    const user3 = new User({ username:"c" });
+    const user3 = new User({ username:"c@gmail.com" });
     const registeredUser3 = await User.register(user3, "c");
 }
 
