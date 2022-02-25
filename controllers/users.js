@@ -8,8 +8,8 @@ module.exports.renderRegisterForm = (req,res)=>{
 
 module.exports.register = async (req,res)=>{
     try {
-        const { username, password } = req.body.user;
-        const user = new User({ username });
+        const { email, password ,name} = req.body.user;
+        const user = new User({ username:email,name });
         const registeredUser = await User.register(user, password);
         //console.log(registeredUser);
         req.login(registeredUser,err=>{
