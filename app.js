@@ -66,16 +66,75 @@ passport.use(new GoogleStrategy({
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: "http://localhost:8080/auth/google/callback",
     passReqToCallback   : true
-  },(request, accessToken, refreshToken, profile, done) => {
-      console.log(profile)
-      return done(null, profile);
-  }
-));
+  },
+//   (request, accessToken, refreshToken, profile, done) => {
+//       console.log(profile)
+//       return done(null, profile);
+//   }
+// ));
+function(req, token, refreshToken, profile, done) {
+    // asynchronous
+    process.nextTick(async function() {
+        // check if the user is already logged in
+        if (!req.user) {
+            await User.findOne({ 'google.id' : profile.id },async function(err, user) {
+                if (err)
+                    return done(err);
+                if (user) {
+                    // if there is a user id already but no token (user was linked at one point and then removed)
+                    if (!user.google.token) {
+                        user.google.token = token;
+                        user.google.name  = profile.displayName;
+                        user.google.email = profile.emails[0].value; // pull the first email
+                        await user.save(function(err) {
+                            if (err)
+                                throw err;
+                            return done(null, user);
+                        });
+                    }
+                    return done(null, user);
+                } else {
+                    var newUser          = new User();
+                    newUser.google.id    = profile.id;
+                    newUser.google.token = token;
+                    newUser.google.name  = profile.displayName;
+                    newUser.google.email = profile.emails[0].value; // pull the first email
+                    await newUser.save(function(err) {
+                        if (err)
+                            throw err;
+                        return done(null, newUser);
+                    });
+                }
+            });
+        } else {
+            // user already exists and is logged in, we have to link accounts
+            var user               = req.user; // pull the user out of the session
+            console.log(user)
+            user.google = {};
+            user.google.id    = profile.id;
+            user.google.token = token;
+            user.google.name  = profile.displayName;
+            user.google.email = profile.emails[0].value; // pull the first email
+
+            await User.findByIdAndUpdate(req.user._id,{"user.google":user.google},function(err) {
+                    if (err)
+                        throw err;
+                    return done(null, user);
+                });
+
+            // await user.save(function(err) {
+            //     if (err)
+            //         throw err;
+            //     return done(null, user);
+            // });
+        }
+    });
+}));
 
 
 passport.serializeUser( (user, done) => { 
-    console.log(`\n--------> Serialize User:`)
-    console.log(user)
+    // console.log(`\n--------> Serialize User:`)
+    // console.log(user)
      // The USER object is the "authenticated user" from the done() in authUser function.
      // serializeUser() will attach this user to "req.session.passport.user.{user}", so that it is tied to the session object for each session.  
 
@@ -84,36 +143,36 @@ passport.serializeUser( (user, done) => {
 
 
 passport.deserializeUser((user, done) => {
-        console.log("\n--------- Deserialized User:")
-        console.log(user)
+        // console.log("\n--------- Deserialized User:")
+        // console.log(user)
         // This is the {user} that was saved in req.session.passport.user.{user} in the serializationUser()
         // deserializeUser will attach this {user} to the "req.user.{user}", so that it can be used anywhere in the App.
 
         done (null, user)
 }) 
 
-let count = 1
-showlogs = (req, res, next) => {
-    console.log("\n==============================")
-    console.log(`------------>  ${count++}`)
+// let count = 1
+// showlogs = (req, res, next) => {
+//     console.log("\n==============================")
+//     console.log(`------------>  ${count++}`)
 
-    console.log(`\n req.session.passport -------> `)
-    console.log(req.session.passport)
+//     console.log(`\n req.session.passport -------> `)
+//     console.log(req.session.passport)
   
-    console.log(`\n req.user -------> `) 
-    console.log(req.user) 
+//     console.log(`\n req.user -------> `) 
+//     console.log(req.user) 
   
-    console.log("\n Session and Cookie")
-    console.log(`req.session.id -------> ${req.session.id}`) 
-    console.log(`req.session.cookie -------> `) 
-    console.log(req.session.cookie) 
+//     console.log("\n Session and Cookie")
+//     console.log(`req.session.id -------> ${req.session.id}`) 
+//     console.log(`req.session.cookie -------> `) 
+//     console.log(req.session.cookie) 
   
-    console.log("===========================================\n")
+//     console.log("===========================================\n")
 
-    next()
-}
+//     next()
+// }
 
-app.use(showlogs)
+// app.use(showlogs)
 
 app.use((req,res,next)=>{
     res.locals.success = req.flash('success');

@@ -9,7 +9,11 @@ module.exports.renderRegisterForm = (req,res)=>{
 module.exports.register = async (req,res)=>{
     try {
         const { email, password ,name} = req.body.user;
-        const user = new User({ username:email,name });
+        const user = new User();
+        console.log(user)
+        user.username = email;
+        user.name = name;
+        user.google = {};
         const registeredUser = await User.register(user, password);
         //console.log(registeredUser);
         req.login(registeredUser,err=>{
