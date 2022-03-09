@@ -14,8 +14,16 @@ const courseImageStorage = new CloudinaryStorage({
         allowed_formats:["jpeg","png","jpg","webp"]
     }
 })
+const commentImageStorage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params:{
+        folder: 'DoubtApp/Comment',
+        allowed_formats:["jpeg","png","jpg","webp"]
+    }
+})
 
 module.exports = {
     cloudinary,
-    courseImageStorage
+    courseImageStorage,
+    commentImageStorage
 }

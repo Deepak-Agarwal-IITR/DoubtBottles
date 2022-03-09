@@ -77,15 +77,28 @@
                             </div>
                         <% } %> 
                     </div>
+                    <div class="row">
+                        <% for(let image of comment.images){ %> 
+                            <img src="<%=image.url %>" alt="" style="width: 200px; height: 100px;">
+                        <% } %> 
+                    </div>
                     <div class="col-12">
                         <% if(currentUser){ %>
                             <div class="collapse" id="collapse-<%=comment._id%>">
-                                <form class="needs-validation w-100 border-0" novalidate action="/courses/<%=id%>/lectures/<%=lecture._id%>/comments/<%=comment._id %>" method="post">
-                                    <div class="mb-1">
-                                        <input class="form-control" type="text" name="comment[text]" id="text">
-                                    </div>
-                                    <button>Add</button>
-                                </form>
+                                <div class="border p-2">
+                                    <form class="needs-validation w-100 border-0" novalidate action="/courses/<%=id%>/lectures/<%=lecture._id%>/comments/<%=comment._id %>" method="post" enctype="multipart/form-data">
+                                        <div class="mb-1">
+                                            <input class="form-control" type="text" name="comment[text]" id="text">
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="form-file custom-file">
+                                                <input type="file" class="form-file-input form-control mb-1" name="image" id="image" multiple>
+                                                <span class="form-file-text custom-file-label"></span>    
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-success">Add</button>
+                                    </form>
+                                </div>
                             </div>    
                         <% } %> 
                     </div>

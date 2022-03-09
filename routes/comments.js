@@ -5,15 +5,19 @@ const { isLoggedIn,isCommentUser,isEnrolledInCourse } = require('../middleware')
 const comments = require("../controllers/comments");
 const catchAsync = require('../utils/catchAsync')
 
-router.get("/new", isLoggedIn,isEnrolledInCourse, comments.renderQuestionForm)
-router.route("/", isLoggedIn, isEnrolledInCourse)
-    .post(catchAsync(comments.createQuestion))
+const multer = require('multer');
+const { commentImageStorage } = require('../cloudinary');
+const upload = multer({ storage:commentImageStorage });
 
-router.route('/:commentId', isLoggedIn,isEnrolledInCourse)
-    .get(catchAsync(comments.likeDislikeComment))
-    .post(catchAsync(comments.addReply))
-    .put(isCommentUser,catchAsync(comments.editComment))
-    .delete(isCommentUser,catchAsync(comments.deleteQuestion))
+router.get("/new", isLoggedIn,isEnrolledInCourse, comments.renderQuestionForm)
+router.route("/")
+    .post(isLoggedIn, isEnrolledInCourse, upload.array('image'),catchAsync(comments.createQuestion))
+
+router.route('/:commentId')
+    .get(isLoggedIn, isEnrolledInCourse, catchAsync(comments.likeDislikeComment))
+    .post(isLoggedIn, isEnrolledInCourse, upload.array('image'), catchAsync(comments.addReply))
+    .put(isLoggedIn, isEnrolledInCourse, isCommentUser, upload.array('image'), catchAsync(comments.editComment))
+    .delete(isLoggedIn, isEnrolledInCourse, isCommentUser, catchAsync(comments.deleteQuestion))
 
 router.delete("/:parentId/:commentId",isLoggedIn,isEnrolledInCourse,isCommentUser,catchAsync(comments.deleteReply))
 
