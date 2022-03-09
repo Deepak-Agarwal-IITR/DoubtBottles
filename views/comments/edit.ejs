@@ -1,6 +1,6 @@
 <%-include('../partials/header',{title: "Edit Comment"})%>
     <h1>Edit Comment</h1>
-    <form action="/courses/<%=id%>/lectures/<%= lectureId %>/comments/<%=comment._id %>?_method=PUT" method="post">
+    <form action="/courses/<%=id%>/lectures/<%= lectureId %>/comments/<%=comment._id %>?_method=PUT" method="post" enctype="multipart/form-data">
         <%if(comment.topic){%> 
             <div class="mb-3">
                 <label for="topic">Topic: </label>
@@ -10,6 +10,22 @@
         <div class="mb-3">
             <label for="text">Text: </label>
             <textarea class="form-control" name="comment[text]" id="text" rows="3"><%=comment.text %> </textarea>
+        </div>
+        <div class="mb-3">
+            <label for="">Add more image(s)</label>
+            <div class="form-file custom-file">
+                <input type="file" class="form-file-input form-control mb-1" name="image" id="image" multiple>
+                <span class="form-file-text custom-file-label"></span>    
+            </div>
+        </div>
+        <div class="mb-3">
+            <%comment.images.forEach(function(image,i){%>
+                <img src="<%= image.url %> " alt="" class="image-thumbnail">
+                <div class="form-check-inline">
+                    <input type="checkbox" name="deleteImages[]" id="image-<%=i%>" value="<%=image.filename%>">
+                </div>
+                <label for="image-<%=i%>">Delete?</label>
+            <%})%>
         </div>
         <button>Save</button>
     </form>

@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
+const { cloudinary } = require("../cloudinary");
+
 const commentSchema = new Schema({
     topic: {
         type: String,
@@ -26,7 +28,11 @@ const commentSchema = new Schema({
     }],
     createdOn:{
         type: Date
-    }
+    },
+    images:[{
+        url: String,
+        filename: String
+    }]
 })
 
 const autoPopulateComment = function(next){
@@ -45,6 +51,9 @@ commentSchema.post('findOneAndDelete', async function(doc) {
         doc.comments.forEach(async (comment)=>{
             await this.model.findByIdAndDelete(comment);         
         })
+        for(let image of doc.images){
+            await cloudinary.uploader.destroy(image.filename);
+        }
     }
 })
 module.exports = mongoose.model('Comment',commentSchema)

@@ -1,6 +1,6 @@
 <%-include('../partials/header',{title: "New Question"})%>
     <h1>Add New Question</h1>
-    <form action="/courses/<%=id%>/lectures/<%=lectureId%>/comments" method="post">
+    <form action="/courses/<%=id%>/lectures/<%=lectureId%>/comments" method="post" enctype="multipart/form-data">
         <div class="mb-3">
             <label for="topic">Topic: </label>
             <input class="form-control" type="text" name="comment[topic]" id="topic">
@@ -8,6 +8,12 @@
         <div class="mb-3">
             <label for="text">Text: </label>
             <textarea class="form-control" name="comment[text]" id="text" rows="3"></textarea>
+        </div>
+        <div class="mb-3">
+            <div class="form-file custom-file">
+                <input type="file" class="form-file-input form-control mb-1" name="image" id="image" multiple>
+                <span class="form-file-text custom-file-label"></span>    
+            </div>
         </div>
         <button>Submit</button>
     </form>

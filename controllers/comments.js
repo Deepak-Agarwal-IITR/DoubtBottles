@@ -1,5 +1,6 @@
 const Lecture = require('../models/lecture')
 const Comment = require('../models/comment')
+const { cloudinary } = require("../cloudinary");
 
 module.exports.renderQuestionForm = (req, res) => {
     const {id,lectureId} = req.params
@@ -10,6 +11,7 @@ module.exports.createQuestion = async (req, res) => {
     const { id,lectureId } = req.params
     const lecture = await Lecture.findById(lectureId);
     const comment = new Comment(req.body.comment)
+    comment.images = req.files.map(f=>({url:f.path,filename:f.filename}))
     comment.user = req.user;
     lecture.comments.push(comment)
     comment.createdOn = new Date();
@@ -55,6 +57,7 @@ module.exports.addReply = async (req, res) => {
     const { id, lectureId,commentId } = req.params
     const foundComment = await Comment.findById(commentId);
     const addedComment = new Comment(req.body.comment)
+    addedComment.images = req.files.map(f=>({url:f.path,filename:f.filename}))
     addedComment.user = req.user;
     foundComment.comments.push(addedComment);
     addedComment.createdOn = new Date();
@@ -73,6 +76,17 @@ module.exports.renderEditCommentForm = async(req, res) => {
 module.exports.editComment = async (req, res) => {
     const { id, lectureId, commentId } = req.params
     const comment = await Comment.findByIdAndUpdate(commentId, { ...req.body.comment });
+    const images = req.files.map(f => ({ url: f.path, filename: f.filename }))
+    comment.images.push(...images)
+    await comment.save()
+
+    if (req.body.deleteImages) {
+        for (let filename of req.body.deleteImages) {
+            await cloudinary.uploader.destroy(filename);
+        }
+        await comment.updateOne({ $pull: { images: { filename: { $in: req.body.deleteImages } } } });
+        //console.log(comment);
+    }
     await comment.save();
     req.flash('success', "Updated comment")
     res.redirect(`/courses/${id}/lectures/${lectureId}`)
