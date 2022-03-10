@@ -1,6 +1,6 @@
 <%-include('../partials/header',{title: "Edit Comment"})%>
     <h1>Edit Comment</h1>
-    <form action="/courses/<%=id%>/lectures/<%= lectureId %>/comments/<%=comment._id %>?_method=PUT" method="post" enctype="multipart/form-data">
+    <form action="/courses/<%=id%>/lectures/<%= lectureId %>/comments/<%=comment._id %>?_method=PUT" method="post" enctype="multipart/form-data" onsubmit="sendData(``)">
         <%if(comment.topic){%> 
             <div class="mb-3">
                 <label for="topic">Topic: </label>
@@ -9,7 +9,8 @@
         <% } %> 
         <div class="mb-3">
             <label for="text">Text: </label>
-            <textarea class="form-control" name="comment[text]" id="text" rows="3"><%=comment.text %> </textarea>
+            <%-include('../partials/texteditor',{id:"",text:comment.text}) %> 
+            <textarea class="form-control" name="comment[text]" id="text" rows="3" style="display:none"></textarea>
         </div>
         <div class="mb-3">
             <label for="">Add more image(s)</label>
