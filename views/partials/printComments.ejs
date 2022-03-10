@@ -5,7 +5,7 @@
     <% } %> 
         
         <% comments.forEach(function(comment){%>
-        <li class="list-group-item 
+        <li class="list-group-item mb-3 border
             <%if("lecture"===parent){ %>
                 bg-success" style="--bs-bg-opacity: .4;
             <% } %>">
@@ -24,7 +24,7 @@
                         <hr>
                     <% } %> 
                     <div class="col-12 mb-1">
-                        <%=comment.text%> 
+                        <%-comment.text%> 
                     </div>
                     
                     <div class="row mb-1">
@@ -86,9 +86,10 @@
                         <% if(currentUser){ %>
                             <div class="collapse" id="collapse-<%=comment._id%>">
                                 <div class="border p-2">
-                                    <form class="needs-validation w-100 border-0" novalidate action="/courses/<%=id%>/lectures/<%=lecture._id%>/comments/<%=comment._id %>" method="post" enctype="multipart/form-data">
+                                    <form class="needs-validation w-100 border-0" novalidate action="/courses/<%=id%>/lectures/<%=lecture._id%>/comments/<%=comment._id %>" method="post" enctype="multipart/form-data" onsubmit="sendData(`<%= comment._id%>`)">
                                         <div class="mb-1">
-                                            <input class="form-control" type="text" name="comment[text]" id="text">
+                                            <%- include('texteditor',{id:comment._id}) %> 
+                                            <textarea class="form-control" name="comment[text]" id="text<%=comment._id%>" rows="0" style="display:none"></textarea>
                                         </div>
                                         <div class="mb-3">
                                             <div class="form-file custom-file">
