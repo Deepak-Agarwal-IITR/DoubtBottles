@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router();
-const { isLoggedIn,isTeacher,isAlreadyEnrolled } = require('../middleware')
+const { isLoggedIn,isTeacher,isAlreadyEnrolled, isEnrolledInCourse } = require('../middleware')
 const courses = require("../controllers/courses");
 const catchAsync = require('../utils/catchAsync')
 
@@ -24,5 +24,7 @@ router.route('/:id')
 router.get('/:id/edit', isLoggedIn, isTeacher, catchAsync(courses.renderEditCourseForm))
 
 router.post('/:id/enroll', isLoggedIn, isAlreadyEnrolled, catchAsync(courses.notifyTeacherForEnrollment))
+
+router.get('/:id/settings', isLoggedIn, isEnrolledInCourse, catchAsync(courses.renderSettingsPage))
 
 module.exports = router;

@@ -86,3 +86,8 @@ module.exports.notifyTeacherForEnrollment = async (req, res) => {
     req.flash('success', "Notified the teacher, wait for the response");
     res.redirect(`/courses/${id}`)
 }
+
+module.exports.renderSettingsPage = (req,res)=>{
+    const {id} = req.params;
+    res.render('courses/settings',{id})
+}
