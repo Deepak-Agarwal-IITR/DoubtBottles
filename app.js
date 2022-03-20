@@ -68,6 +68,9 @@ app.use((req,res,next)=>{
     res.locals.currentUser = req.user;
     next();
 })
+app.get('/',(req,res)=>{
+    res.render('home');
+})
 app.use('/courses', courseRouter)
 app.use('/courses/:id/lectures', lectureRouter)
 app.use('/courses/:id/announcements',announcementRouter)
