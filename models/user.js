@@ -6,6 +6,10 @@ const passportLocalMongoose = require('passport-local-mongoose');
 const userSchema = new Schema({
     name: {
         type: String
+    },
+    numberOfNotifications:{
+        type:Number,
+        default:0
     }
 })
 

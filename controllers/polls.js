@@ -1,6 +1,6 @@
 const Course = require("../models/course")
 const Notification = require("../models/notification")
-
+const User = require("../models/user")
 module.exports.createNewPoll = async (req,res)=>{
     const {id} = req.params;
     const {question,options,endOn,endTime} = req.body;
@@ -33,6 +33,11 @@ module.exports.createNewPoll = async (req,res)=>{
         course
     });
     await notification.save();
+    for(let receiver of receivers){
+        const rece = await User.findById(receiver.id);
+        rece.numberOfNotifications = rece.numberOfNotifications+1;
+        await rece.save();
+    }
     req.flash("success","Poll made successfully")
     res.redirect(`/courses/${course._id}/polls`) 
 }

@@ -78,7 +78,11 @@ module.exports.notifyTeacherForEnrollment = async (req, res) => {
         createdOn: new Date()
     });
     await notification.save();
-
+    for(let receiver of receivers){
+        const rece = await User.findById(receiver.id);
+        rece.numberOfNotifications = rece.numberOfNotifications+1;
+        await rece.save();
+    }
     req.flash('success', "Notified the teacher, wait for the response");
     res.redirect(`/courses/${id}`)
 }

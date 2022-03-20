@@ -3,7 +3,7 @@
 
 <% if(currentUser._id.toString()===course.teacher._id.toString()){ %> 
     <div type="button" data-toggle="collapse" data-target="#collapseExample"
-    aria-expanded="false" aria-controls="collapseExample">Conduct a Poll</div>
+    aria-expanded="false" aria-controls="collapseExample" class="btn btn-warning">Conduct a Poll</div>
     <div class="collapse" id="collapseExample">
         <form class="needs-validation w-100 border-0" novalidate action="/courses/<%=course._id%>/polls" method="post">
             <div class="mb-3">

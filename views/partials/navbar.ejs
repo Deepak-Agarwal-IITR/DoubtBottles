@@ -1,4 +1,4 @@
-<nav class="navbar sticky-top navbar-expand-sm navbar-dark bg-dark">
+<nav class="navbar sticky-top navbar-expand-md navbar-dark bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="/">DoubtSolver</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -17,9 +17,9 @@
                     </div>
                 <%}else{%>
                     <div class="navbar-nav">
-                        <a class="nav-link"><%=currentUser.username%></a>
+                        <a class="nav-link disabled"><%=currentUser.username%></a>
                         <a class="nav-link" href="/courses/my">My Courses</a>
-                        <a class="nav-link" href="/notifications">Notifications</a>
+                        <a class="nav-link" href="/notifications">Notifications <span><%=currentUser.numberOfNotifications%> </span></a>
                         <a class="nav-link" href="/logout">Log Out</a>
                     </div>
                 <%}%>

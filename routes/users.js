@@ -17,4 +17,5 @@ router.get('/logout',users.logout)
 
 router.get('/notifications', isLoggedIn, catchAsync(users.showAllNotifications))
 router.get('/notifications/:id',isLoggedIn,catchAsync(users.resolveNotification));
+router.get('/notifications/:id/dismiss',isLoggedIn,catchAsync(users.dismissNotification));
 module.exports = router;

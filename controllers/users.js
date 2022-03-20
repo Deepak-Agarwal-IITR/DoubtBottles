@@ -11,7 +11,6 @@ module.exports.register = async (req,res)=>{
         const { email, password ,name} = req.body.user;
         const user = new User({ username:email,name });
         const registeredUser = await User.register(user, password);
-        //console.log(registeredUser);
         req.login(registeredUser,err=>{
             if(err) return next(err);
             req.flash('success', 'Welcome!')
@@ -62,6 +61,9 @@ module.exports.resolveNotification = async(req,res)=>{
         notification.receivers[0].isResolved = true;
         await notification.save();
 
+        receiver.numberOfNotifications = receiver.numberOfNotifications-1;
+        await receiver.save();
+
         const sendNotification = new Notification({ 
             description: `You have been enrolled in <a href=/courses/${course._id}>${course.name}</a> by ${receiver.username}.`, 
             sender: req.user._id, 
@@ -70,13 +72,19 @@ module.exports.resolveNotification = async(req,res)=>{
             createdOn : new Date() 
         });
         await sendNotification.save();
-
+        const rece = await User.findById(notification.sender._id);
+        rece.numberOfNotifications = rece.numberOfNotifications+1;
+        await rece.save();
+        
         req.flash('success',`${sender.username} has been Enrolled in the course: ${course.name}.`)
         res.redirect('/notifications');
     } else {
         notification.receivers[0].isResolved = true;
         await notification.save();
 
+        receiver.numberOfNotifications = receiver.numberOfNotifications-1;
+        await receiver.save();
+        
         const sendNotification = new Notification({ 
             description: `Your request for enrolling in <a href=/courses/${course._id}>${course.name}</a> by ${receiver.username} has been canceled.`, 
             sender: req.user._id, 
@@ -85,8 +93,29 @@ module.exports.resolveNotification = async(req,res)=>{
             createdOn : new Date() 
         });
         await sendNotification.save();
+        const rece = await User.findById(notification.sender._id);
+        rece.numberOfNotifications = rece.numberOfNotifications+1;
+        await rece.save();
         
         req.flash('success',`${sender.username} request has been canceled for the course: ${course.name}.`)
         res.redirect('/notifications');
     }
 };
+
+module.exports.dismissNotification = async (req,res)=>{
+    const {id} = req.params;
+    const notification = await Notification.findById(id);
+    const receiver = notification.receivers.find(receiver => receiver.id.toString()===req.user._id.toString());
+    if(receiver){
+        receiver.isResolved = true;
+        await notification.save();
+
+        const user = await User.findById(receiver.id);
+        user.numberOfNotifications = user.numberOfNotifications -1;
+        await user.save();
+        res.redirect('/notifications');
+    }else{
+        req.flash('error',"This notification is not related to you.")
+        res.redirect('/notifiactions')
+    }
+}

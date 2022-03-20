@@ -1,6 +1,6 @@
 const Course = require("../models/course")
 const Notification = require("../models/notification")
-
+const User = require("../models/user")
 module.exports.createNewAnnouncement = async (req,res)=>{
     const {id} = req.params;
     const {description} = req.body;
@@ -23,6 +23,11 @@ module.exports.createNewAnnouncement = async (req,res)=>{
         course
     });
     await notification.save();
+    for(let receiver of receivers){
+        const rece = await User.findById(receiver.id);
+        rece.numberOfNotifications = rece.numberOfNotifications+1;
+        await rece.save();
+    }
     req.flash("success","Announcement made successfully")
     res.redirect(`/courses/${course._id}/announcements`)   
 }

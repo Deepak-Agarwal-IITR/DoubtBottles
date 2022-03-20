@@ -1,15 +1,9 @@
 <%-include('../partials/header',{title: "Announcements"})%>
 <%-include('../partials/sidebar',{active:"announcements",courseId:course._id}) %> 
-<% for(let announcement of announcements){ %>
-    <div>
-        <%=announcement.description %> 
-        <%=announcement.createdOn.toLocaleString() %> 
-    </div>
-<% } %> 
-
+<div class="mb-3">
 <% if(currentUser._id.toString()===course.teacher._id.toString()){ %> 
     <div type="button" data-toggle="collapse" data-target="#collapseExample"
-    aria-expanded="false" aria-controls="collapseExample">Make an Announcement</div>
+    aria-expanded="false" aria-controls="collapseExample" class="btn btn-warning mb-3">Make an Announcement</div>
     <div class="collapse" id="collapseExample">
         <form class="needs-validation w-100 border-0"novalidate action="/courses/<%=course._id%>/announcements" method="post">
             <div class="mb-3">
@@ -17,27 +11,18 @@
                 <textarea class="form-control" name="description" id="description" rows="3"></textarea>
             </div>
             <div class="mb-3">
-                <button class="btn btn-success btn-sm" type="submit">Submit</button>
+                <button class="btn btn-success btn-sm" type="submit">Announce</button>
             </div>
         </form>
     </div>
 <% } %> 
 
-<!-- <p>
-    <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
-        aria-controls="collapseExample">
-        Link with href
-    </a>
-    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample"
-        aria-expanded="false" aria-controls="collapseExample">
-        Button with data-target
-    </button>
-</p>
-<div class="collapse" id="collapseExample">
-    <div class="card card-body">
-        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim
-        keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+<% for(let announcement of announcements){ %>
+    <div class="card p-1">
+        <%=announcement.description %> 
+        <%=announcement.createdOn.toLocaleString() %> 
     </div>
-</div> -->
+<% } %> 
+</div>
 <%-include('../partials/sidebarFooter')%> 
 <%-include('../partials/footer')%>
