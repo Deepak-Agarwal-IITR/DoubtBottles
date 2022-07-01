@@ -1,4 +1,4 @@
-# DoubtSolver
+# DoubtBottles
 ➢ A web platform for students to ask their questions. Teachers can make courses and students can ask doubts according to lectures. </br> 
 
 ## Features
